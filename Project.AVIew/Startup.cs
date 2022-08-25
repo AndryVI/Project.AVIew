@@ -57,11 +57,6 @@ namespace Project.AVIew
                    name: "default",
                    pattern: "{controller}/{action}/{id?}");
 
-                endpoints.MapControllerRoute(
-                      name: "Calculate",
-                      pattern: "{controller}/{action}/{a}/{b}"
-                  );
-
             });
         }
     }
