@@ -1,39 +1,67 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
+using Microsoft.OpenApi.Models;
 namespace Project.AVIew
 {
     public class Startup
     {
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+        public IConfiguration Configuration { get; }
+
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddRazorPages();
+            services.AddControllersWithViews();
+            services.AddControllers();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1.01", new OpenApiInfo { Title = "WEB", Version = "v1.01" });
+            });
         }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
             if (env.IsDevelopment())
             {
+                app.UseSwagger();
                 app.UseDeveloperExceptionPage();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1.01/swagger.json", "WEB v1.01");
+                });
             }
+
+            app.UseStaticFiles();
 
             app.UseRouting();
 
+            app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
+                endpoints.MapControllerRoute("main",
+                        pattern: "{title?}",
+                        defaults: new
+                        {
+                            controller = "Home",
+                            action = "index"
+                        });
+
+                endpoints.MapControllerRoute(
+                   name: "default",
+                   pattern: "{controller}/{action}/{id?}");
+
+                endpoints.MapControllerRoute(
+                      name: "Calculate",
+                      pattern: "{controller}/{action}/{a}/{b}"
+                  );
+
             });
         }
     }
