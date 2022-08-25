@@ -4,6 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Project.AVIew.OtherAPI;
+
 namespace Project.AVIew
 {
     public class Startup
@@ -23,6 +25,7 @@ namespace Project.AVIew
             {
                 c.SwaggerDoc("v1.01", new OpenApiInfo { Title = "WEB", Version = "v1.01" });
             });
+            services.AddOtherAPI();
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
