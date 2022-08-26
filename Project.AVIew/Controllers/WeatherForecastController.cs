@@ -25,6 +25,7 @@ namespace Project.AVIew.Controllers
         public WeatherForecastController(ILogger<WeatherForecastController> logger, IRepository repository)
         {
             _logger = logger;
+            _repository = repository;
         }
 
         [HttpGet]
@@ -43,13 +44,21 @@ namespace Project.AVIew.Controllers
         [HttpPost]
         public async Task<IActionResult> ActiveDevice(string city)
         {
+            try
+            {
+                var getAllLogoDevicesForUser = await _repository.GetWeather(city);
 
-            var getAllLogoDevicesForUser = await _repository.GetWeather(city);
+                if (getAllLogoDevicesForUser == null)
+                    return NotFound("city - notFound");
 
-            if (0 == 0)
-                return NotFound("user with phone not found");
+                return Ok(getAllLogoDevicesForUser);
 
-            //return Ok();
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
