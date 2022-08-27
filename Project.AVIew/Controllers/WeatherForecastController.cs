@@ -6,6 +6,8 @@ using System.Linq;
 using Project.AVIew.Model;
 using System.Threading.Tasks;
 using Project.AVIew.OtherAPI;
+using OpenWeatherAPI;
+using Newtonsoft.Json;
 
 namespace Project.AVIew.Controllers
 {
@@ -21,7 +23,7 @@ namespace Project.AVIew.Controllers
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
-       
+
         public WeatherForecastController(ILogger<WeatherForecastController> logger, IRepository repository)
         {
             _logger = logger;
@@ -42,18 +44,38 @@ namespace Project.AVIew.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ActiveDevice(string city)
+        [Route("OpenWeatherAPI")]
+        [Produces(typeof(QueryResponse))]
+        public async Task<IActionResult> OpenWeatherAPI(string city)
         {
             try
             {
-                var getAllLogoDevicesForUser = await _repository.GetWeather(city);
+                var getAllLogoDevicesForUser = await _repository.GetWeatherByOpenWeatherAPI(city);
 
                 if (getAllLogoDevicesForUser == null)
                     return NotFound("city - notFound");
-
                 return Ok(getAllLogoDevicesForUser);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
+        [HttpGet]
+        [Route("TomorrowAPI")]
+        public async Task<IActionResult> TomorrowAPI()
+        {
+            try
+            {
+                var json = await _repository.GetWeatherByTomorrowAPI();
 
+                if (json == null)
+                    return NotFound("bad requset");
+
+                var yourClass = JsonConvert.DeserializeObject<ResponsTomorrowAPI>(json.Content);
+
+                return Ok(yourClass);
             }
             catch (Exception ex)
             {
