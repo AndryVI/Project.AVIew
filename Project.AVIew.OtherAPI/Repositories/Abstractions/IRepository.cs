@@ -8,5 +8,6 @@ namespace Project.AVIew.OtherAPI
     {
         Task<QueryResponse> GetWeatherByOpenWeatherAPI(string city);
         Task<RestResponse> GetWeatherByTomorrowAPI();
+        Task<RestResponse> PostWeatherByTomorrowAPI();
     }
 }
