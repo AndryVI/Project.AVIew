@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Project.AVIew.OtherAPI.Services;
 using OpenWeatherAPI;
 using Newtonsoft.Json;
+using Project.AVIew.OtherAPI.Model.Tomorrow;
 
 namespace Project.AVIew.Controllers
 {
@@ -91,14 +92,12 @@ namespace Project.AVIew.Controllers
         {
             try
             {
-                var json = await _repository.PostWeatherByTomorrowAPI();
+                var respons = await _repository.PostWeatherByTomorrowAPI();
 
-                if (json == null)
+                if (respons == null)
                     return NotFound("bad requset");
 
-                var yourClass = JsonConvert.DeserializeObject<ResponsTomorrowAPI>(json.Content);
-
-                return Ok(yourClass);
+                return Ok(respons);
             }
             catch (Exception ex)
             {

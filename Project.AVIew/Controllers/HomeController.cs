@@ -1,18 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Project.AVIew.Model;
-using Project.AVIew.OtherAPI;
+using Project.AVIew.OtherAPI.Model.Tomorrow;
 using System.Threading.Tasks;
 using System;
 using Newtonsoft.Json;
+using Project.AVIew.OtherAPI.Services;
 
 namespace Project.AVIew.Controllers
 {
 
     public class HomeController : Controller
     {
-        private readonly IRepository _repository;
+        private readonly IAPIServices _repository;
         private ResponsTomorrowAPI answer;
-        public HomeController(IRepository repository)
+        public HomeController(IAPIServices repository)
         {
             _repository = repository;
             answer = new ResponsTomorrowAPI() {

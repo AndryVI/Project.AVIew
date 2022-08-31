@@ -7,7 +7,7 @@ namespace Project.AVIew.EF.Entities.User
     {
         [Key]
         [Required]
-        public long Id { get; set; }
+        public Guid Id { get; set; }
         [Required]
         public string Login { get; set; }
         [Required]
