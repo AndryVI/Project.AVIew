@@ -8,16 +8,18 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
 using Project.AVIew.Logic;
-using System.Linq;
 using System;
+using Project.AVIew.EF.Repositories;
 
 namespace Project.AVIew.Controllers
 {
     public class AccountController : Controller
     {
-        public AccountController(ILogger<HomeController> logger)
+        private readonly IUserRepository _userRepository;
+        public AccountController(ILogger<HomeController> logger, IUserRepository userRepository)
         {
             logger.LogInformation("This AccountController");
+            _userRepository = userRepository;
         }
 
         public IActionResult Denied() => View();
@@ -52,17 +54,16 @@ namespace Project.AVIew.Controllers
         [HttpPost]
         public async Task<IActionResult> SignIn(LoginBindingModel model)
         {
-            //var serviceModel = model.ToServiceModel();
-
             if (ModelState.IsValid)
             {
-                var userOrNull = Database.Users.FirstOrDefault(x => x.Login == model.Login);
-                if (userOrNull is UserModel user)
+                var userOrNull = _userRepository.GetUser(model.Login);
+
+                if (userOrNull.Result != null)
                 {
-                    var isCorrectPassword = PasswordHasher.IsCorrectPassword(user, model.Password);
+                    var isCorrectPassword = PasswordHasher.IsCorrectPassword(userOrNull.Result.PasswordHashed, model.Password);
                     if (isCorrectPassword)
                     {
-                        await SignInAsync(user);
+                        await SignInAsync(model);
                         return RedirectToAction("Index", "Home");
                     }
                 }
@@ -75,12 +76,12 @@ namespace Project.AVIew.Controllers
             }
         }
 
-        private async Task SignInAsync(UserModel user)
+        private async Task SignInAsync(LoginBindingModel user)
         {
             var claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.Name, user.Login),
-                new Claim(ClaimTypes.Role, user.Login  == "admin"? "Admin" : "User"),
+                new Claim(ClaimTypes.Role, user.Login  == "Admin"? "Admin" : "User"),
             };
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme, ClaimTypes.Name, ClaimTypes.Role);
             var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
@@ -102,14 +103,14 @@ namespace Project.AVIew.Controllers
         {
             if (ModelState.IsValid)
             {
-                var userAlreadyExists = Database.Users.Any(x => x.Login == model.Login);
-                if (userAlreadyExists)
+                var userAlreadyExists = _userRepository.GetUser(model.Login);
+                if (userAlreadyExists.Result != null)
                 {
                     ModelState.AddModelError(nameof(model.Login), "Login is already in use");
                     return View(model);
                 }
 
-                Database.AddUser(Guid.NewGuid(), model.Login, model.Password);
+                _userRepository.AddUser(model.Login, PasswordHasher.HashPassword(model.Password));
 
                 return RedirectToAction("Index", "Home");
             }

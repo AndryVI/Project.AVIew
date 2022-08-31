@@ -16,14 +16,15 @@ namespace Project.AVIew.EF.Repositories
            => _context.Users
                       .FirstOrDefaultAsync(cache => cache.Login == login);
 
-        public async Task AddUser(Guid id, string login, string hashedPin)
+        public async Task AddUser(string login, string hashedPin)
         {
             var user = new User()
             {
-                Id = id,
+                Id = Guid.NewGuid(),
                 Login = login,
-                HashedPin = hashedPin,
-                Updated = DateTime.Now
+                PasswordHashed = hashedPin,
+                Updated = DateTime.Now,
+                Role = "User"
             };
 
             _context.Users.Add(user);

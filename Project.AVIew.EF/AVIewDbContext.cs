@@ -14,6 +14,7 @@ namespace Project.AVIew.EF
         public AVIewDbContext(DbContextOptions<AVIewDbContext> options, ILoggerFactory loggerFactory)
             : base(options)
         {
+            Database.EnsureCreated();
             _loggerFactory = loggerFactory;
             //Database.Migrate();
         }

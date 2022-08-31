@@ -25,7 +25,8 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "ApiKey_OpenWeather": "e578eb444e0a9425fd34ae7bacdc430a",
-        "ApiKey_Tomorrow": "9lSpYZhU3ZvQX9EkzqbI7hY6e9XdMVFD"
+        "ApiKey_Tomorrow": "9lSpYZhU3ZvQX9EkzqbI7hY6e9XdMVFD",
+        "ConnectionString": "Server=DESKTOP-UA6RAA3\\SQLITTEST; Database=WEB_DB; Trusted_Connection=True;"
       },
       "dotnetRunMessages": "true",
       "applicationUrl": "https://localhost:5001;http://localhost:5000"

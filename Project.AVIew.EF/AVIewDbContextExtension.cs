@@ -8,13 +8,16 @@ namespace Project.AVIew.EF
 {
     public static class AVIewDbContextExtension
     {
-        public static IServiceCollection AddBvrIdentityDbContext(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddAVIewEFDbContext(this IServiceCollection services, IConfiguration configuration)
         {
-            var connectionString = BuildConnectionString(configuration);
 
+            //var connectionString = BuildConnectionString(configuration);
+
+         
             services.AddDbContext<AVIewDbContext>(options =>
             {
-                options.UseSqlServer(connectionString);
+                //options.UseSqlServer(connectionString);
+                options.UseSqlServer(configuration["ConnectionString"]);
 
                 if (configuration["ASPNETCORE_ENVIRONMENT"] is not "prod")
                     options.EnableSensitiveDataLogging();
@@ -35,7 +38,7 @@ namespace Project.AVIew.EF
         private static string BuildConnectionString(IConfiguration config)
             => new SqlConnectionStringBuilder
             {
-                DataSource = config["DatabaseDataSource"].Replace(";", ","),
+                DataSource = config["ConnectionString"].Replace(";", ","),
                 InitialCatalog = "BVR",
                 UserID = config["DatabaseUserId"],
                 Password = config["DatabasePassword"],

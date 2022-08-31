@@ -11,8 +11,10 @@ namespace Project.AVIew.EF.Entities.User
         [Required]
         public string Login { get; set; }
         [Required]
-        public string HashedPin { get; set; }
+        public string PasswordHashed { get; set; }
         [Required]
         public DateTime Updated { get; set; }
+        [Required]
+        public string Role { get; set; }
     }
 }

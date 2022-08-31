@@ -5,6 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Project.AVIew.OtherAPI;
+using Project.AVIew.EF;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace Project.AVIew
 {
@@ -26,6 +28,14 @@ namespace Project.AVIew
                 c.SwaggerDoc("v1.01", new OpenApiInfo { Title = "WEB", Version = "v1.01" });
             });
             services.AddOtherAPI();
+            services.AddAVIewEFDbContext(Configuration);
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+              .AddCookie(options =>
+              {
+                  options.LoginPath = "/Account/SignInAccess";
+                  options.AccessDeniedPath = "/Account/Denied";
+              });
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -43,6 +53,8 @@ namespace Project.AVIew
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

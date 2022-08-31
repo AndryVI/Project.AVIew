@@ -66,11 +66,10 @@ namespace Project.AVIew.OtherAPI.Services
                                                      ",\"timesteps\":[\"1h\"]" +
                                                      ",\"startTime\":\"now\"" +
                                                      ",\"endTime\":\"nowPlus6h\"}", ParameterType.RequestBody);
+
             RestResponse execute = await client.ExecuteAsync(request);
 
-
             var responsTomorrow = JsonConvert.DeserializeObject<ResponsTomorrowAPI>(execute.Content);
-
 
             return responsTomorrow;
         }

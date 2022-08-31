@@ -1,6 +1,5 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
-using Project.AVIew.Models;
 
 namespace Project.AVIew.Logic
 {
@@ -14,10 +13,10 @@ namespace Project.AVIew.Logic
             return Encoding.UTF8.GetString(hashedBytes);
         }
 
-        public static bool IsCorrectPassword(UserModel user, string password)
+        public static bool IsCorrectPassword(string userpassword, string password)
         {
             var passwordHash = HashPassword(password);
-            return passwordHash == user.PasswordHash;
+            return passwordHash == userpassword;
         }
     }
 }
