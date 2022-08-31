@@ -14,7 +14,7 @@ namespace Project.AVIew.Logic
             return Encoding.UTF8.GetString(hashedBytes);
         }
 
-        public static bool IsCorrectPassword(User user, string password)
+        public static bool IsCorrectPassword(UserModel user, string password)
         {
             var passwordHash = HashPassword(password);
             return passwordHash == user.PasswordHash;

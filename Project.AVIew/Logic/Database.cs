@@ -7,19 +7,19 @@ namespace Project.AVIew.Logic
 {
     public static class Database
     {
-        public static List<User> Users;
+        public static List<UserModel> Users;
 
         static Database()
         {
             string[] lines = File.ReadAllLines("App_Data/users.txt");
 
-            Users = new List<User>();
+            Users = new List<UserModel>();
 
             foreach (string line in lines)
             {
                 string[] items = line.Split(';');
 
-                User user = new User();
+                UserModel user = new UserModel();
                 user.Id = Guid.Parse(items[0].Trim());
                 user.Login = items[1].Trim();
                 user.PasswordHash = PasswordHasher.HashPassword(items[2].Trim());
@@ -29,7 +29,7 @@ namespace Project.AVIew.Logic
 
         public static void AddUser(Guid IdGuid, string Login, string Password)
         {
-            var newUser = new User()
+            var newUser = new UserModel()
             {
                 Id = IdGuid,
                 Login = Login,

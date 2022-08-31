@@ -57,7 +57,7 @@ namespace Project.AVIew.Controllers
             if (ModelState.IsValid)
             {
                 var userOrNull = Database.Users.FirstOrDefault(x => x.Login == model.Login);
-                if (userOrNull is User user)
+                if (userOrNull is UserModel user)
                 {
                     var isCorrectPassword = PasswordHasher.IsCorrectPassword(user, model.Password);
                     if (isCorrectPassword)
@@ -75,7 +75,7 @@ namespace Project.AVIew.Controllers
             }
         }
 
-        private async Task SignInAsync(User user)
+        private async Task SignInAsync(UserModel user)
         {
             var claims = new List<Claim>()
             {
