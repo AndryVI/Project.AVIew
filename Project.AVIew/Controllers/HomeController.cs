@@ -143,7 +143,6 @@ namespace Project.AVIew.Controllers
 
 
             //var yourClass = JsonConvert.DeserializeObject<ResponsTomorrowAPI>(json.Content);
-            var df = WeatherCodes.Clear_Sunny;
 
             return View(answer.Data.Timelines[0]);
             //return View(yourClass.Data.Timelines[0]);

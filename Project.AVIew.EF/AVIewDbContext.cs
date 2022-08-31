@@ -1,0 +1,28 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Project.AVIew.EF.Entities.User;
+using System.Linq;
+
+
+namespace Project.AVIew.EF
+{
+    public class AVIewDbContext : DbContext
+    {
+        private readonly ILoggerFactory _loggerFactory;
+        public AVIewDbContext()
+        { }
+        public AVIewDbContext(DbContextOptions<AVIewDbContext> options, ILoggerFactory loggerFactory)
+            : base(options)
+        {
+            _loggerFactory = loggerFactory;
+            //Database.Migrate();
+        }
+
+        public DbSet<User> Users { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+
+        }
+    }
+}

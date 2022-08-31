@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Project.AVIew.OtherAPI.Services;
 
 namespace Project.AVIew.OtherAPI
 {
@@ -6,7 +7,7 @@ namespace Project.AVIew.OtherAPI
     {
         public static IServiceCollection AddOtherAPI(this IServiceCollection services)
         {
-            services.AddTransient<IRepository, Repository>();
+            services.AddTransient<IAPIServices, APIServices>();
 
             return services;
         }

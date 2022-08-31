@@ -1,20 +1,22 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using OpenWeatherAPI;
+using Project.AVIew.OtherAPI.Model.Tomorrow;
 using RestSharp;
 using System.Threading.Tasks;
 
-namespace Project.AVIew.OtherAPI
+namespace Project.AVIew.OtherAPI.Services
 {
     /*
      * https://docs.tomorrow.io/reference/data-layers-overview
      */
-    public class Repository : IRepository
+    public class APIServices : IAPIServices
     {
         private IConfiguration _configuration;
         private string _apiKey_OpenWeathe;
         private string _apiKey_Tomorrow;
 
-        public Repository(IConfiguration configuration)
+        public APIServices(IConfiguration configuration)
         {
             _configuration = configuration;
             _apiKey_OpenWeathe = _configuration["ApiKey_OpenWeather"];
@@ -40,7 +42,7 @@ namespace Project.AVIew.OtherAPI
 
             return response;
         }
-        public async Task<RestResponse> PostWeatherByTomorrowAPI()
+        public async Task<ResponsTomorrowAPI> PostWeatherByTomorrowAPI()
         {
 
             var client = new RestClient("https://api.tomorrow.io/v4/");
@@ -64,9 +66,13 @@ namespace Project.AVIew.OtherAPI
                                                      ",\"timesteps\":[\"1h\"]" +
                                                      ",\"startTime\":\"now\"" +
                                                      ",\"endTime\":\"nowPlus6h\"}", ParameterType.RequestBody);
-            RestResponse response = await client.ExecuteAsync(request);
+            RestResponse execute = await client.ExecuteAsync(request);
 
-            return response;
+
+            var responsTomorrow = JsonConvert.DeserializeObject<ResponsTomorrowAPI>(execute.Content);
+
+
+            return responsTomorrow;
         }
 
     }

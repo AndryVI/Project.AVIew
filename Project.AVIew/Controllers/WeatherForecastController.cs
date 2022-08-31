@@ -5,10 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Project.AVIew.Model;
 using System.Threading.Tasks;
-using Project.AVIew.OtherAPI;
+using Project.AVIew.OtherAPI.Services;
 using OpenWeatherAPI;
 using Newtonsoft.Json;
-using Project.AVIew.Model;
 
 namespace Project.AVIew.Controllers
 {
@@ -16,7 +15,7 @@ namespace Project.AVIew.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
-        private readonly IRepository _repository;
+        private readonly IAPIServices _repository;
         private readonly ILogger<WeatherForecastController> _logger;
 
         private static readonly string[] Summaries = new[]
@@ -27,7 +26,7 @@ namespace Project.AVIew.Controllers
       
 
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger, IRepository repository)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, IAPIServices repository)
         {
             _logger = logger;
             _repository = repository;

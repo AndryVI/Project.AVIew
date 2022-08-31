@@ -1,13 +1,14 @@
 ﻿using System.Threading.Tasks;
 using OpenWeatherAPI;
+using Project.AVIew.OtherAPI.Model.Tomorrow;
 using RestSharp;
 
-namespace Project.AVIew.OtherAPI
+namespace Project.AVIew.OtherAPI.Services
 {
-    public interface IRepository
+    public interface IAPIServices
     {
         Task<QueryResponse> GetWeatherByOpenWeatherAPI(string city);
         Task<RestResponse> GetWeatherByTomorrowAPI();
-        Task<RestResponse> PostWeatherByTomorrowAPI();
+        Task<ResponsTomorrowAPI> PostWeatherByTomorrowAPI();
     }
 }
