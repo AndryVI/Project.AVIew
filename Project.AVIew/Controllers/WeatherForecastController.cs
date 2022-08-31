@@ -24,14 +24,17 @@ namespace Project.AVIew.Controllers
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
+      
+
 
         public WeatherForecastController(ILogger<WeatherForecastController> logger, IRepository repository)
         {
             _logger = logger;
             _repository = repository;
+          
         }
 
-        [HttpGet]
+    [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
             var rng = new Random();

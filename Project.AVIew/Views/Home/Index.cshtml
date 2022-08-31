@@ -1,25 +1,223 @@
 ﻿@{
     ViewData["Title"] = "Home";
+    Layout = "_Layout";
 }
 
-<div class="container marketing">
+@model Project.AVIew.Model.Timelines;
 
-</div>
-<div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-light bg-image"
-     style="background-image: url('https://mdbootstrap.com/img/Photos/Others/images/76.jpg');
-            height: 100vh">
-    <div class="col-md-5 p-lg-5 mx-auto my-5">
-        <h1 class="display-4 mypadding-form font-weight-normal"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Тестировочный проект</font></font></h1>
-        <p class="lead font-weight-normal"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"></font><font style="vertical-align: inherit;"></font></font></p>
-        <br>
-        <br>
-        <br>
-        <a class="btn btn-outline-secondary" href="swagger/index.html"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Перейти</font></font></a>
+
+
+<div class="container marketing padding-boreder">
+    <div class="row">
+
+        <div class="col-lg-12">
+            <h3 class="mb-3 "> Погода в Киеве сегодня</h3>
+        </div>
     </div>
-    <div class="product-device box-shadow d-none d-md-block"></div>
-    <div class="product-device product-device-2 box-shadow d-none d-md-block"></div>
+    <div class="row w3-example">
+
+        <div class="col-lg-12">
+            <h3 class="mb-3 text-center ">Температура</h3>
+            <p>@await Html.PartialAsync("_TimePartial")</p>
+            <div class="container">
+                <div class="row">
+                    @if (Model != null)
+                    {
+                        foreach (var Interval in Model.Intervals)
+                        {
+                            <div class="col" style="background-color: #f6faff; margin: 0 5px 0 5px; ">
+                                <br />
+                                <p class="text-center">@Interval.StartTime.ToString("HH:mm")</p>
+                                @switch (@Interval.Values.WeatherCode)
+                                {
+                                    case (Project.AVIew.Model.WeatherCodes)1000:<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="https://files.readme.io/48b265b-weather_icon_small_ic_clear3x.png" alt=""> break;
+                                    case (Project.AVIew.Model.WeatherCodes)1100:<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="https://files.readme.io/c3d2596-weather_icon_small_ic_mostly_clear3x.png" alt=""> break;
+                                    case (Project.AVIew.Model.WeatherCodes)1101:<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="https://files.readme.io/5ef9011-weather_icon_small_ic_partly_cloudy3x.png" alt=""> break;
+                                    case (Project.AVIew.Model.WeatherCodes)1102:<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="https://files.readme.io/6beaa54-weather_icon_small_ic_mostly_cloudy3x.png" alt=""> break;
+                                    case (Project.AVIew.Model.WeatherCodes)1001:<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="https://files.readme.io/4042728-weather_icon_small_ic_cloudy3x.png" alt=""> break;
+                                    case (Project.AVIew.Model.WeatherCodes)2000:<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="https://files.readme.io/8d37852-weather_icon_small_ic_fog3x.png" alt=""> break;
+                                    case (Project.AVIew.Model.WeatherCodes)2100:<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="https://files.readme.io/76580b9-weather_icon_small_ic_fog_light3x.png" alt=""> break;
+                                    case (Project.AVIew.Model.WeatherCodes)4000:<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="https://files.readme.io/f22e925-weather_icon_small_ic_rain_drizzle3x.png" alt=""> break;
+                                    case (Project.AVIew.Model.WeatherCodes)4001:<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="https://files.readme.io/aab8713-weather_icon_small_ic_rain3x.png" alt=""> break;
+                                    case (Project.AVIew.Model.WeatherCodes)4200:<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="https://files.readme.io/ea98852-weather_icon_small_ic_rain_light3x.png" alt=""> break;
+                                    case (Project.AVIew.Model.WeatherCodes)4201:<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="https://files.readme.io/fdacbb8-weather_icon_small_ic_rain_heavy3x.png" alt=""> break;
+                                    case (Project.AVIew.Model.WeatherCodes)5000:<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="https://files.readme.io/731a898-weather_icon_small_ic_snow3x.png" alt=""> break;
+                                    case (Project.AVIew.Model.WeatherCodes)5001:<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="https://files.readme.io/1174193-weather_icon_small_ic_flurries3x.png" alt=""> break;
+                                    case (Project.AVIew.Model.WeatherCodes)5100:<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="https://files.readme.io/c736bc9-weather_icon_small_ic_snow_light3x.png" alt=""> break;
+                                    case (Project.AVIew.Model.WeatherCodes)5101:<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="https://files.readme.io/20c73b9-weather_icon_small_ic_snow_heavy3x.png" alt=""> break;
+                                    case (Project.AVIew.Model.WeatherCodes)6000:<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="https://files.readme.io/43b5585-weather_icon_small_ic_freezing_rain_drizzle3x.png" alt=""> break;
+                                    case (Project.AVIew.Model.WeatherCodes)6001:<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="https://files.readme.io/321062d-weather_icon_small_ic_freezing_rain3x.png" alt=""> break;
+                                    case (Project.AVIew.Model.WeatherCodes)6200:<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="https://files.readme.io/9d1a4dc-weather_icon_small_ic_freezing_rain_light3x.png" alt=""> break;
+                                    case (Project.AVIew.Model.WeatherCodes)6201:<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="https://files.readme.io/2f614b7-weather_icon_small_ic_freezing_rain_heavy3x.png" alt=""> break;
+                                    case (Project.AVIew.Model.WeatherCodes)7000:<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="https://files.readme.io/314349c-weather_icon_small_ic_ice_pellets3x.png" alt=""> break;
+                                    case (Project.AVIew.Model.WeatherCodes)7101:<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="https://files.readme.io/d5707d4-weather_icon_small_ic_ice_pellets_heavy3x.png" alt=""> break;
+                                    case (Project.AVIew.Model.WeatherCodes)7102:<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="https://files.readme.io/8cde587-weather_icon_small_ic_ice_pellets_light3x.png" alt=""> break;
+                                    case (Project.AVIew.Model.WeatherCodes)8000:<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="https://files.readme.io/39fb806-weather_icon_small_ic_tstorm3x.png" alt="">break;
+                                    default: break;
+                                }
+
+                                <p class="text-center">@Interval.Values.Temperature °C</p>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+        <br />
+    </div>
+    <div class="row w3-example">
+
+        <div class="col-lg-12">
+            <h3 class="mb-3 text-center ">Скорость и направление ветра</h3>
+            <br />
+            <div class="container">
+                <div class="row">
+                    @if (Model != null)
+                    {
+                        foreach (var Interval in Model.Intervals)
+                        {
+                            <div class="col" style="background-color: #f6faff; margin: 0 5px 0 5px; ">
+                                <br />
+                                <p class="text-center">@Interval.Values.WindSpeed м/с</p>
+                                <br />
+                                <img class="mb-4 rounded mx-auto d-block windDirectionsIMG " src="~/svg/arrow.svg" alt="" style="@Html.Raw("transform: rotate(" + (int)@Interval.Values.WindDirection + "deg);")">
+                                <p class="text-center">@Interval.Values.WindDirection °</p>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+            <br />
+        </div>
+        <br />
+    </div>
+
+
+
+    <div class="row w3-example">
+
+        <div class="col-lg-12">
+            <h3 class="mb-3 text-center ">Влажность, %</h3>
+            <br />
+            <div class="container">
+                <div class="row">
+                    @if (Model != null)
+                    {
+                        foreach (var Interval in Model.Intervals)
+                        {
+                            <div class="col" style="@Html.Raw("background-color: rgb(0 130 255 / " + (int)@Interval.Values.Humidity + "%); margin: 0 5px 0 5px;")">
+                                <br />
+                                <p class="text-center">@Interval.Values.Humidity</p>
+                            </div>
+
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row w3-example">
+
+        <div class="col-lg-12">
+            <h3 class="mb-3 text-center ">Осадок</h3>
+            <br />
+            <div class="container">
+                <h4 class="mb-3 ">Вероятность</h4>
+                <div class="row">
+                    @if (Model != null)
+                    {
+                        foreach (var Interval in Model.Intervals)
+                        {
+
+                            <div class="col" style="background-color: #f6faff; margin: 0 5px 0 5px; ">
+                                <br />
+                                <p class="text-center">@Interval.Values.PrecipitationProbability %</p>
+                            </div>
+                        }
+                    }
+                </div>
+                <h4 class="mb-3 ">Интенсивность</h4>
+                <div class="row">
+                    @if (Model != null)
+                    {
+                        foreach (var Interval in Model.Intervals)
+                        {
+
+                            <div class="col" style="background-color: #f6faff; margin: 0 5px 0 5px; ">
+                                <br />
+                                <p class="text-center">@Interval.Values.PrecipitationIntensity </p>
+                            </div>
+                        }
+                    }
+                </div>
+                <h4 class="mb-3">Тип</h4>
+                <div class="row">
+                    @if (Model != null)
+                    {
+                        foreach (var Interval in Model.Intervals)
+                        {
+
+                            <div class="col" style="background-color: #f6faff; margin: 0 5px 0 5px; ">
+                                <br />
+                                @switch (@Interval.Values.PrecipitationType)
+                                {
+                                    case (Project.AVIew.Model.PrecipitationTypes)1:<img class="mb-4 rounded mx-auto d-block windDirectionsIMG " src="~/svg/precipitationType/Rain.svg" alt=""> break;
+                                    case (Project.AVIew.Model.PrecipitationTypes)2:<img class="mb-4 rounded mx-auto d-block windDirectionsIMG " src="~/svg/precipitationType/Snow.svg" alt=""> break;
+                                    case (Project.AVIew.Model.PrecipitationTypes)3:<img class="mb-4 rounded mx-auto d-block windDirectionsIMG " src="~/svg/precipitationType/FreezingRain.svg" alt=""> break;
+                                    case (Project.AVIew.Model.PrecipitationTypes)4:<img class="mb-4 rounded mx-auto d-block windDirectionsIMG " src="~/svg/precipitationType/IcePellets.svg" alt=""> break;
+                                    default:<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="~/svg/precipitationType/NA.svg" alt="">break;
+                                }
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row w3-example">
+
+        <div class="col-lg-12">
+            <h3 class="mb-3 text-center ">Видимость объектов </h3>
+            <br />
+            <div class="container">
+                <div class="row">
+                    @if (Model != null)
+                    {
+                        foreach (var Interval in Model.Intervals)
+                        {
+                            <div class="col" style="background-color: #f6faff; margin: 0 5px 0 5px; ">
+                                <br />
+                                <p class="text-center">@Interval.Values.Visibility км</p>
+                            </div>
+
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row w3-example">
+
+        <div class="col-lg-12">
+            <h3 class="mb-3 text-center ">Процент покрытия неба облаками</h3>
+            <br />
+            <div class="container">
+                <div class="row">
+                    @if (Model != null)
+                    {
+                        foreach (var Interval in Model.Intervals)
+                        {
+                            <div class="col" style="background-color: #f6faff; margin: 0 5px 0 5px; ">
+                                <br />
+                                <p class="text-center">@Interval.Values.CloudCover %</p>
+                            </div>
+
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-
-<script>
-
-</script>

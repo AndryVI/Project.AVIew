@@ -48,7 +48,7 @@ namespace Project.AVIew.OtherAPI
             request.AddHeader("Accept", "application/json");
             request.AddHeader("Accept-Encoding", "gzip");
             request.AddHeader("Content-Type", "application/json");
-            request.AddParameter("application/json", "{\"location\":\"42.3478, -71.0466\"" +
+            request.AddParameter("application/json", "{\"location\":\"50.4755, 30.5198\"" +
                                                      ",\"fields\":[\"temperature\"" +
                                                                  ",\"weatherCode\"" +
                                                                  ",\"humidity\"" +
@@ -59,7 +59,6 @@ namespace Project.AVIew.OtherAPI
                                                                  ",\"precipitationType\"" +
                                                                  ",\"visibility\"" +
                                                                  ",\"cloudCover\"" +
-                                                                 ",\"cloudCeiling\"" +
                                                                  ",\"grassIndex\"]" +
                                                      ",\"units\":\"metric\"" +
                                                      ",\"timesteps\":[\"1h\"]" +

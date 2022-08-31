@@ -14,7 +14,6 @@ namespace Project.AVIew.Model
         public PrecipitationTypes? PrecipitationType { get; set; }   //  осадков представляет собой вероятность >0,0254 см (0,01 дюйма)
         public double? Visibility { get; set; }   //  объект или свет можно четко различить - км миль
         public double? CloudCover { get; set; }   //  часть неба, закрытая облаками при наблюдении %
-        public double? CloudCeiling { get; set; }   // км или null  миль или null
         public GrassIndexs? GrassIndex { get; set; }   //  осадков представляет собой вероятность >0,0254 см (0,01 дюйма)
     }
 }

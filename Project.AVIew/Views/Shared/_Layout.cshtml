@@ -18,14 +18,14 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarsExample07">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item dropdown">
+                        <!--<li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Общее</a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" asp-controller="##" asp-action="##">###</a></li>
                             </ul>
-                        </li>
+                        </li>-->
                     </ul>
-                  
+
                     &nbsp;&nbsp;
                     @if (User.Identity.IsAuthenticated)
                     {
@@ -35,7 +35,8 @@
                     {
                         <div><a class="btn btn btn-outline-primary" asp-action="SignIn" asp-controller="Account">Войти</a></div>
                     }
-
+                    &nbsp;&nbsp;
+                    <div><a class="btn btn-outline-secondary" asp-action="index.html" asp-controller="swagger">Swagger</a></div>
                 </div>
             </div>
         </nav>
