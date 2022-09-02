@@ -29,8 +29,21 @@ namespace Project.AVIew.OtherAPI.Services
 
             var query = await openWeatherAPI.QueryAsync(city);
 
+
             return query;
         }
+
+        public async Task<RestResponse> GetWeatherByOpenWeatherAPIv25()
+        {
+            var client = new RestClient("https://api.openweathermap.org/data/2.5/");
+            var request = new RestRequest($"forecast?lat=50.4755&lon=30.5198&appid={_apiKey_OpenWeathe}&units=metric", Method.Get);
+            request.AddHeader("Accept", "application/json");
+            request.AddHeader("Accept-Encoding", "gzip");
+            RestResponse response = await client.ExecuteAsync(request);
+
+            return response;
+        }
+
 
         public async Task<RestResponse> GetWeatherByTomorrowAPI()
         {

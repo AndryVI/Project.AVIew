@@ -9,6 +9,7 @@ using Project.AVIew.OtherAPI.Services;
 using OpenWeatherAPI;
 using Newtonsoft.Json;
 using Project.AVIew.OtherAPI.Model.Tomorrow;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Project.AVIew.Controllers
 {
@@ -34,7 +35,8 @@ namespace Project.AVIew.Controllers
           
         }
 
-    [HttpGet]
+        [HttpGet, Authorize]
+        [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
             var rng = new Random();
@@ -47,9 +49,26 @@ namespace Project.AVIew.Controllers
             .ToArray();
         }
 
-        [HttpPost]
+        [HttpGet]
+        [Route("GetWeatherByOpenWeatherAPIv25")]
+        public async Task<IActionResult> GetWeatherByOpenWeatherAPIv25()
+        {
+            try
+            {
+                var getAllLogoDevicesForUser = await _repository.GetWeatherByOpenWeatherAPIv25();
+
+                if (getAllLogoDevicesForUser == null)
+                    return NotFound("city - notFound");
+                return Ok(getAllLogoDevicesForUser);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
         [Route("OpenWeatherAPI")]
-        [Produces(typeof(QueryResponse))]
         public async Task<IActionResult> OpenWeatherAPI(string city)
         {
             try
@@ -65,6 +84,8 @@ namespace Project.AVIew.Controllers
                 return BadRequest(ex.Message);
             }
         }
+       
+
 
         [HttpGet]
         [Route("GetTomorrowAPI")]
@@ -88,6 +109,7 @@ namespace Project.AVIew.Controllers
         }
         [HttpPost]
         [Route("PostTomorrowAPI")]
+        [Produces(typeof(ResponsTomorrowAPI))]
         public async Task<IActionResult> PostTomorrowAPI()
         {
             try
