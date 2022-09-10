@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Project.AVIew.Model
+namespace Project.AVIew.OtherAPI.Model.Tomorrow
 {
     public class ResponsTomorrowAPI
     {
@@ -16,10 +16,10 @@ namespace Project.AVIew.Model
         public string Timestep { get; set; }
         public DateTime EndTime { get; set; }
         public DateTime StartTime { get; set; }
-        public IntervalsByOueth[] Intervals { get; set; }
+        public IntervalsByDate[] Intervals { get; set; }
     }
 
-    public class IntervalsByOueth
+    public class IntervalsByDate
     {
         public DateTime StartTime { get; set; }
         public Values Values { get; set; }

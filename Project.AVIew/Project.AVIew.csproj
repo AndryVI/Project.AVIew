@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Project.AVIew.EF\Project.AVIew.EF.csproj" />
     <ProjectReference Include="..\Project.AVIew.OtherAPI\Project.AVIew.OtherAPI.csproj" />
   </ItemGroup>
 

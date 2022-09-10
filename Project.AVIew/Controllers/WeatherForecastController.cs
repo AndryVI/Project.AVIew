@@ -5,10 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Project.AVIew.Model;
 using System.Threading.Tasks;
-using Project.AVIew.OtherAPI;
+using Project.AVIew.OtherAPI.Services;
 using OpenWeatherAPI;
 using Newtonsoft.Json;
-using Project.AVIew.Model;
+using Project.AVIew.OtherAPI.Model.Tomorrow;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Project.AVIew.Controllers
 {
@@ -16,7 +17,7 @@ namespace Project.AVIew.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
-        private readonly IRepository _repository;
+        private readonly IAPIServices _repository;
         private readonly ILogger<WeatherForecastController> _logger;
 
         private static readonly string[] Summaries = new[]
@@ -24,13 +25,17 @@ namespace Project.AVIew.Controllers
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
+      
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger, IRepository repository)
+
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, IAPIServices repository)
         {
             _logger = logger;
             _repository = repository;
+          
         }
 
+        [HttpGet, Authorize]
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
@@ -44,9 +49,26 @@ namespace Project.AVIew.Controllers
             .ToArray();
         }
 
-        [HttpPost]
+        [HttpGet]
+        [Route("GetWeatherByOpenWeatherAPIv25")]
+        public async Task<IActionResult> GetWeatherByOpenWeatherAPIv25()
+        {
+            try
+            {
+                var getAllLogoDevicesForUser = await _repository.GetWeatherByOpenWeatherAPIv25();
+
+                if (getAllLogoDevicesForUser == null)
+                    return NotFound("city - notFound");
+                return Ok(getAllLogoDevicesForUser);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
         [Route("OpenWeatherAPI")]
-        [Produces(typeof(QueryResponse))]
         public async Task<IActionResult> OpenWeatherAPI(string city)
         {
             try
@@ -62,6 +84,8 @@ namespace Project.AVIew.Controllers
                 return BadRequest(ex.Message);
             }
         }
+       
+
 
         [HttpGet]
         [Route("GetTomorrowAPI")]
@@ -85,18 +109,17 @@ namespace Project.AVIew.Controllers
         }
         [HttpPost]
         [Route("PostTomorrowAPI")]
+        [Produces(typeof(ResponsTomorrowAPI))]
         public async Task<IActionResult> PostTomorrowAPI()
         {
             try
             {
-                var json = await _repository.PostWeatherByTomorrowAPI();
+                var respons = await _repository.PostWeatherByTomorrowAPI();
 
-                if (json == null)
+                if (respons == null)
                     return NotFound("bad requset");
 
-                var yourClass = JsonConvert.DeserializeObject<ResponsTomorrowAPI>(json.Content);
-
-                return Ok(yourClass);
+                return Ok(respons);
             }
             catch (Exception ex)
             {

@@ -1,4 +1,4 @@
-﻿namespace Project.AVIew.Model
+﻿namespace Project.AVIew.OtherAPI.Model.Tomorrow
 {
     public enum Units
     {

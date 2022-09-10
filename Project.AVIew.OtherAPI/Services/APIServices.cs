@@ -1,20 +1,22 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using OpenWeatherAPI;
+using Project.AVIew.OtherAPI.Model.Tomorrow;
 using RestSharp;
 using System.Threading.Tasks;
 
-namespace Project.AVIew.OtherAPI
+namespace Project.AVIew.OtherAPI.Services
 {
     /*
      * https://docs.tomorrow.io/reference/data-layers-overview
      */
-    public class Repository : IRepository
+    public class APIServices : IAPIServices
     {
         private IConfiguration _configuration;
         private string _apiKey_OpenWeathe;
         private string _apiKey_Tomorrow;
 
-        public Repository(IConfiguration configuration)
+        public APIServices(IConfiguration configuration)
         {
             _configuration = configuration;
             _apiKey_OpenWeathe = _configuration["ApiKey_OpenWeather"];
@@ -27,8 +29,21 @@ namespace Project.AVIew.OtherAPI
 
             var query = await openWeatherAPI.QueryAsync(city);
 
+
             return query;
         }
+
+        public async Task<RestResponse> GetWeatherByOpenWeatherAPIv25()
+        {
+            var client = new RestClient("https://api.openweathermap.org/data/2.5/");
+            var request = new RestRequest($"forecast?lat=50.4755&lon=30.5198&appid={_apiKey_OpenWeathe}&units=metric", Method.Get);
+            request.AddHeader("Accept", "application/json");
+            request.AddHeader("Accept-Encoding", "gzip");
+            RestResponse response = await client.ExecuteAsync(request);
+
+            return response;
+        }
+
 
         public async Task<RestResponse> GetWeatherByTomorrowAPI()
         {
@@ -40,7 +55,7 @@ namespace Project.AVIew.OtherAPI
 
             return response;
         }
-        public async Task<RestResponse> PostWeatherByTomorrowAPI()
+        public async Task<ResponsTomorrowAPI> PostWeatherByTomorrowAPI()
         {
 
             var client = new RestClient("https://api.tomorrow.io/v4/");
@@ -48,7 +63,7 @@ namespace Project.AVIew.OtherAPI
             request.AddHeader("Accept", "application/json");
             request.AddHeader("Accept-Encoding", "gzip");
             request.AddHeader("Content-Type", "application/json");
-            request.AddParameter("application/json", "{\"location\":\"42.3478, -71.0466\"" +
+            request.AddParameter("application/json", "{\"location\":\"50.4755, 30.5198\"" +
                                                      ",\"fields\":[\"temperature\"" +
                                                                  ",\"weatherCode\"" +
                                                                  ",\"humidity\"" +
@@ -59,15 +74,17 @@ namespace Project.AVIew.OtherAPI
                                                                  ",\"precipitationType\"" +
                                                                  ",\"visibility\"" +
                                                                  ",\"cloudCover\"" +
-                                                                 ",\"cloudCeiling\"" +
                                                                  ",\"grassIndex\"]" +
                                                      ",\"units\":\"metric\"" +
                                                      ",\"timesteps\":[\"1h\"]" +
                                                      ",\"startTime\":\"now\"" +
                                                      ",\"endTime\":\"nowPlus6h\"}", ParameterType.RequestBody);
-            RestResponse response = await client.ExecuteAsync(request);
 
-            return response;
+            RestResponse execute = await client.ExecuteAsync(request);
+
+            var responsTomorrow = JsonConvert.DeserializeObject<ResponsTomorrowAPI>(execute.Content);
+
+            return responsTomorrow;
         }
 
     }

@@ -1,0 +1,21 @@
+﻿<span id="hours"></span>
+
+<script type="text/javascript">
+
+    obj_hours = document.getElementById("hours");
+
+    name_month = new Array("января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря");
+    name_day = new Array("воскресенье", "понедельник", "вторник", "среда", "четверг", "пятница", "суббота");
+
+    function wr_hours() {
+        time = new Date();
+
+        time_wr = name_day[time.getDay()] + ", " + time.getDate() + " " + name_month[time.getMonth()] ;
+
+        obj_hours.innerHTML = time_wr;
+    }
+
+    wr_hours();
+    setInterval("wr_hours();", 1000);
+
+</script>
