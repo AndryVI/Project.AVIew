@@ -68,8 +68,8 @@ namespace Project.AVIew.Controllers
         }
 
         [HttpGet]
-        [Route("OpenWeatherAPI")]
-        public async Task<IActionResult> OpenWeatherAPI(string city)
+        [Route("GetOpenWeatherAPIByNuget")]
+        public async Task<IActionResult> GetOpenWeatherAPIByNuget(string city)
         {
             try
             {

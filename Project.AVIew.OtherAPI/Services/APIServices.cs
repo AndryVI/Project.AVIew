@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using OpenWeatherAPI;
 using Project.AVIew.OtherAPI.Model.Tomorrow;
+using Project.AVIew.OtherAPI.Model.OpenWeather;
 using RestSharp;
 using System.Threading.Tasks;
 
@@ -33,7 +34,7 @@ namespace Project.AVIew.OtherAPI.Services
             return query;
         }
 
-        public async Task<RestResponse> GetWeatherByOpenWeatherAPIv25()
+        public async Task<ResponsOpenWeatherAPI> GetWeatherByOpenWeatherAPIv25()
         {
             var client = new RestClient("https://api.openweathermap.org/data/2.5/");
             var request = new RestRequest($"forecast?lat=50.4755&lon=30.5198&appid={_apiKey_OpenWeathe}&units=metric", Method.Get);
@@ -41,7 +42,9 @@ namespace Project.AVIew.OtherAPI.Services
             request.AddHeader("Accept-Encoding", "gzip");
             RestResponse response = await client.ExecuteAsync(request);
 
-            return response;
+            var responsOpenWeather = JsonConvert.DeserializeObject<ResponsOpenWeatherAPI>(response.Content);
+
+            return responsOpenWeather;
         }
 
 
