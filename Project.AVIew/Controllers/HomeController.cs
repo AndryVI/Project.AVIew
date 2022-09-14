@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System;
 using Newtonsoft.Json;
 using Project.AVIew.OtherAPI.Services;
+using Project.AVIew.Services;
 
 namespace Project.AVIew.Controllers
 {
@@ -12,10 +13,12 @@ namespace Project.AVIew.Controllers
     public class HomeController : Controller
     {
         private readonly IAPIServices _repository;
+        private readonly IEventProvider _eventProvider;
         private ResponsTomorrowAPI answer;
-        public HomeController(IAPIServices repository)
+        public HomeController(IAPIServices repository, IEventProvider eventProvider)
         {
             _repository = repository;
+            _eventProvider = eventProvider;
             answer = new ResponsTomorrowAPI() {
                 Data = new Data()
                 {
@@ -145,8 +148,11 @@ namespace Project.AVIew.Controllers
 
             //var yourClass = JsonConvert.DeserializeObject<ResponsTomorrowAPI>(json.Content);
 
+            await _eventProvider.AddTomorrowWeatherHistiry(answer.Data.Timelines[0].Intervals);
+
             return View(answer.Data.Timelines[0]);
             //return View(yourClass.Data.Timelines[0]);
+            
         }
         public IActionResult About()
         {

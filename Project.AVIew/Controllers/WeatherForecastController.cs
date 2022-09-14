@@ -10,6 +10,7 @@ using OpenWeatherAPI;
 using Newtonsoft.Json;
 using Project.AVIew.OtherAPI.Model.Tomorrow;
 using Microsoft.AspNetCore.Authorization;
+using Project.AVIew.Services;
 
 namespace Project.AVIew.Controllers
 {
@@ -18,6 +19,7 @@ namespace Project.AVIew.Controllers
     public class WeatherForecastController : ControllerBase
     {
         private readonly IAPIServices _repository;
+        private readonly IEventProvider _eventProvider;
         private readonly ILogger<WeatherForecastController> _logger;
 
         private static readonly string[] Summaries = new[]
@@ -28,11 +30,11 @@ namespace Project.AVIew.Controllers
       
 
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger, IAPIServices repository)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, IAPIServices repository, IEventProvider eventProvider)
         {
             _logger = logger;
             _repository = repository;
-          
+            _eventProvider = eventProvider;
         }
 
         [HttpGet, Authorize]
@@ -55,11 +57,15 @@ namespace Project.AVIew.Controllers
         {
             try
             {
-                var getAllLogoDevicesForUser = await _repository.GetWeatherByOpenWeatherAPIv25();
+                var respons = await _repository.GetWeatherByOpenWeatherAPIv25();
 
-                if (getAllLogoDevicesForUser == null)
-                    return NotFound("city - notFound");
-                return Ok(getAllLogoDevicesForUser);
+
+                if (respons == null)
+                    return NotFound("bad request");
+
+                await _eventProvider.AddOpenWeatherWeatherHistiry(respons.List);
+
+                return Ok(respons);
             }
             catch (Exception ex)
             {
@@ -77,6 +83,7 @@ namespace Project.AVIew.Controllers
 
                 if (getAllLogoDevicesForUser == null)
                     return NotFound("city - notFound");
+
                 return Ok(getAllLogoDevicesForUser);
             }
             catch (Exception ex)
@@ -96,7 +103,7 @@ namespace Project.AVIew.Controllers
                 var json = await _repository.GetWeatherByTomorrowAPI();
 
                 if (json == null)
-                    return NotFound("bad requset");
+                    return NotFound("bad request");
 
                 var yourClass = JsonConvert.DeserializeObject<ResponsTomorrowAPI>(json.Content);
 
@@ -117,7 +124,9 @@ namespace Project.AVIew.Controllers
                 var respons = await _repository.PostWeatherByTomorrowAPI();
 
                 if (respons == null)
-                    return NotFound("bad requset");
+                    return NotFound("bad request");
+
+                await _eventProvider.AddTomorrowWeatherHistiry(respons.Data.Timelines[0].Intervals);
 
                 return Ok(respons);
             }

@@ -7,6 +7,7 @@ using Microsoft.OpenApi.Models;
 using Project.AVIew.OtherAPI;
 using Project.AVIew.EF;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Project.AVIew.Extensions;
 
 namespace Project.AVIew
 {
@@ -27,8 +28,10 @@ namespace Project.AVIew
             {
                 c.SwaggerDoc("v1.01", new OpenApiInfo { Title = "WEB", Version = "v1.01" });
             });
+
             services.AddOtherAPI();
             services.AddAVIewEFDbContext(Configuration);
+            services.AddServices();
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
               .AddCookie(options =>

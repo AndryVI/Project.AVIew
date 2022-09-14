@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Project.AVIew.EF.Entities.User;
+using Project.AVIew.EF.Entities.Weather;
 using System.Linq;
 
 
@@ -14,16 +15,19 @@ namespace Project.AVIew.EF
         public AVIewDbContext(DbContextOptions<AVIewDbContext> options, ILoggerFactory loggerFactory)
             : base(options)
         {
-            Database.EnsureCreated();
+            //Database.EnsureCreated();
             _loggerFactory = loggerFactory;
             //Database.Migrate();
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<WeatherHistory> WeatherHistorys { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
 
+
         }
     }
 }
+
