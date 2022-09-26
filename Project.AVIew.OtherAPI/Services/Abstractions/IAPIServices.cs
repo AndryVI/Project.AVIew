@@ -9,7 +9,8 @@ namespace Project.AVIew.OtherAPI.Services
     public interface IAPIServices
     {
         Task<QueryResponse> GetWeatherByOpenWeatherAPI(string city);
-        Task<ResponsOpenWeatherAPI> GetWeatherByOpenWeatherAPIv25();
+        Task<ResponsOpenWeatherAPI> GetWeatherByOpenWeatherAPIv25Bulk();
+        Task<Lists> GetWeatherByOpenWeatherAPIv25Current();
         Task<RestResponse> GetWeatherByTomorrowAPI();
         Task<ResponsTomorrowAPI> PostWeatherByTomorrowAPI();
     }

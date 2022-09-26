@@ -34,7 +34,7 @@ namespace Project.AVIew.OtherAPI.Services
             return query;
         }
 
-        public async Task<ResponsOpenWeatherAPI> GetWeatherByOpenWeatherAPIv25()
+        public async Task<ResponsOpenWeatherAPI> GetWeatherByOpenWeatherAPIv25Bulk()
         {
             var client = new RestClient("https://api.openweathermap.org/data/2.5/");
             var request = new RestRequest($"forecast?lat=50.4755&lon=30.5198&appid={_apiKey_OpenWeathe}&units=metric", Method.Get);
@@ -43,6 +43,18 @@ namespace Project.AVIew.OtherAPI.Services
             RestResponse response = await client.ExecuteAsync(request);
 
             var responsOpenWeather = JsonConvert.DeserializeObject<ResponsOpenWeatherAPI>(response.Content);
+
+            return responsOpenWeather;
+        }
+        public async Task<Lists> GetWeatherByOpenWeatherAPIv25Current()
+        {
+            var client = new RestClient("https://api.openweathermap.org/data/2.5/");
+            var request = new RestRequest($"weather?lat=50.4755&lon=30.5198&appid={_apiKey_OpenWeathe}", Method.Get);
+            request.AddHeader("Accept", "application/json");
+            request.AddHeader("Accept-Encoding", "gzip");
+            RestResponse response = await client.ExecuteAsync(request);
+
+            var responsOpenWeather = JsonConvert.DeserializeObject<Lists>(response.Content);
 
             return responsOpenWeather;
         }

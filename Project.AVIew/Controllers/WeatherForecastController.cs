@@ -52,18 +52,39 @@ namespace Project.AVIew.Controllers
         }
 
         [HttpGet]
-        [Route("GetWeatherByOpenWeatherAPIv25")]
-        public async Task<IActionResult> GetWeatherByOpenWeatherAPIv25()
+        [Route("GetWeatherByOpenWeatherAPIv25Bulk")]
+        public async Task<IActionResult> GetWeatherByOpenWeatherAPIv25Bulk()
         {
             try
             {
-                var respons = await _repository.GetWeatherByOpenWeatherAPIv25();
+                var respons = await _repository.GetWeatherByOpenWeatherAPIv25Bulk();
 
 
                 if (respons == null)
                     return NotFound("bad request");
 
                 await _eventProvider.AddOpenWeatherWeatherHistiry(respons.List);
+
+                return Ok(respons);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet]
+        [Route("GetWeatherByOpenWeatherAPIv25Current")]
+        public async Task<IActionResult> GetWeatherByOpenWeatherAPIv25Current()
+        {
+            try
+            {
+                var respons = await _repository.GetWeatherByOpenWeatherAPIv25Current();
+
+
+                if (respons == null)
+                    return NotFound("bad request");
+
+                //await _eventProvider.AddOpenWeatherWeatherHistiry(respons);
 
                 return Ok(respons);
             }

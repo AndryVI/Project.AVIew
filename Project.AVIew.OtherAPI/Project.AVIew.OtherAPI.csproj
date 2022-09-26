@@ -14,4 +14,8 @@
     <ProjectReference Include="..\Project.AVIew.EF\Project.AVIew.EF.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Model\OpenWeather\Enum\" />
+  </ItemGroup>
+
 </Project>

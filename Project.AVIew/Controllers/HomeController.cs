@@ -1,25 +1,28 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Project.AVIew.Model;
 using Project.AVIew.OtherAPI.Model.Tomorrow;
 using System.Threading.Tasks;
 using System;
+using System.Linq;
 using Newtonsoft.Json;
 using Project.AVIew.OtherAPI.Services;
 using Project.AVIew.Services;
+using Project.AVIew.OtherAPI.Model.OpenWeather;
+using System.Collections.Generic;
 
 namespace Project.AVIew.Controllers
 {
 
     public class HomeController : Controller
     {
-        private readonly IAPIServices _repository;
+        private readonly IAPIServices _apiService;
         private readonly IEventProvider _eventProvider;
-        private ResponsTomorrowAPI answer;
-        public HomeController(IAPIServices repository, IEventProvider eventProvider)
+        private ResponsTomorrowAPI answerTomorrow;
+        private ResponsOpenWeatherAPI answerOpenWeather;
+        public HomeController(IAPIServices apiService, IEventProvider eventProvider)
         {
-            _repository = repository;
+            _apiService = apiService;
             _eventProvider = eventProvider;
-            answer = new ResponsTomorrowAPI() {
+            answerTomorrow = new ResponsTomorrowAPI() {
                 Data = new Data()
                 {
                     Timelines = new Timelines[] {
@@ -139,29 +142,313 @@ namespace Project.AVIew.Controllers
                     }
                 } 
             };
+            answerOpenWeather = new ResponsOpenWeatherAPI() {
+                Cod = 200,
+                Message = "",
+                Cnt = "",
+                List = new Lists[] {
+                      new Lists(){
+                        Dt = 117,
+                        Main = new Main(){
+                            Temp = 7.4,
+                            Feels_Like = 12.91,
+                            Temp_Min = 11.31,
+                            Temp_Max = 13.4,
+                            Pressure = 1009,
+                            Sea_Level = 1009,
+                            Grnd_Level = 1002,
+                            Humidity = 81,
+                            Temp_Kf  = 2.08},
+                        Weather = new Weather[]{
+                            new Weather() {
+                                Id = 500,
+                                Main = "Rain",
+                                Description = "light rain",
+                                Icon = "10d"},
+                        },
+                        Clouds = new Clouds(){
+                            all = 100,},
+                        Wind = new Wind(){
+                            Speed = 3.74,
+                            Deg = 301,
+                            Gust =  3.74},
+                        Visibility = 10000,
+                        Pop = 1,
+                        Dt_Txt = new DateTime(2022, 09, 23, 00, 0, 0)
+                    },
+                      new Lists(){
+                        Dt = 118,
+                        Main = new Main(){
+                            Temp = 09.4,
+                            Feels_Like = 12.91,
+                            Temp_Min = 11.31,
+                            Temp_Max = 13.4,
+                            Pressure = 1009,
+                            Sea_Level = 1009,
+                            Grnd_Level = 1002,
+                            Humidity = 81,
+                            Temp_Kf  = 2.08},
+                        Weather = new Weather[]{
+                            new Weather() {
+                                Id = 500,
+                                Main = "Rain",
+                                Description = "light rain",
+                                Icon = "10d"},
+                        },
+                        Clouds = new Clouds(){
+                            all = 100,},
+                        Wind = new Wind(){
+                            Speed = 3.74,
+                            Deg = 301,
+                            Gust =  3.74},
+                        Visibility = 10000,
+                        Pop = 1,
+                        Dt_Txt = new DateTime(2022, 09, 23, 03, 0, 0)
+                    },
+                    new Lists(){
+                        Dt = 119,
+                        Main = new Main(){
+                            Temp = 10.4,
+                            Feels_Like = 12.91,
+                            Temp_Min = 11.31,
+                            Temp_Max = 13.4,
+                            Pressure = 1009,
+                            Sea_Level = 1009,
+                            Grnd_Level = 1002,
+                            Humidity = 81,
+                            Temp_Kf  = 2.08},
+                        Weather = new Weather[]{
+                            new Weather() {
+                                Id = 500,
+                                Main = "Rain",
+                                Description = "light rain",
+                                Icon = "10d"},
+                        },
+                        Clouds = new Clouds(){
+                            all = 100,},
+                        Wind = new Wind(){
+                            Speed = 3.74,
+                            Deg = 301,
+                            Gust =  3.74},
+                        Visibility = 10000,
+                        Pop = 1,
+                        Dt_Txt = new DateTime(2022, 09, 23, 06, 0, 0)
+                    },
+                    new Lists(){
+                        Dt = 120,
+                        Main = new Main(){
+                            Temp = 10.4,
+                            Feels_Like = 12.91,
+                            Temp_Min = 11.31,
+                            Temp_Max = 13.4,
+                            Pressure = 1009,
+                            Sea_Level = 1009,
+                            Grnd_Level = 1002,
+                            Humidity = 81,
+                            Temp_Kf  = 2.08},
+                        Weather = new Weather[]{
+                            new Weather() {
+                                Id = 500,
+                                Main = "Rain",
+                                Description = "light rain",
+                                Icon = "10d"},
+                        },
+                        Clouds = new Clouds(){
+                            all = 100,},
+                        Wind = new Wind(){
+                            Speed = 3.74,
+                            Deg = 301,
+                            Gust =  3.74},
+                        Visibility = 10000,
+                        Pop = 1,
+                        Dt_Txt = new DateTime(2022, 09, 23, 09, 0, 0)
+                    },
+                    new Lists(){
+                        Dt = 121,
+                        Main = new Main(){
+                            Temp = 13.4,
+                            Feels_Like = 12.91,
+                            Temp_Min = 11.31,
+                            Temp_Max = 13.4,
+                            Pressure = 1009,
+                            Sea_Level = 1009,
+                            Grnd_Level = 1002,
+                            Humidity = 81,
+                            Temp_Kf  = 2.08},
+                        Weather = new Weather[]{
+                            new Weather() {
+                                Id = 500,
+                                Main = "Rain",
+                                Description = "light rain",
+                                Icon = "10d"},
+                        },
+                        Clouds = new Clouds(){
+                            all = 100,},
+                        Wind = new Wind(){
+                            Speed = 3.74,
+                            Deg = 301,
+                            Gust =  3.74},
+                        Visibility = 10000,
+                        Pop = 1,
+                        Dt_Txt = new DateTime(2022, 09, 23, 12, 0, 0)
+                    },
+                    new Lists(){
+                        Dt = 122,
+                        Main = new Main(){
+                            Temp = 12.4,
+                            Feels_Like = 12.91,
+                            Temp_Min = 11.31,
+                            Temp_Max = 13.4,
+                            Pressure = 1009,
+                            Sea_Level = 1009,
+                            Grnd_Level = 1002,
+                            Humidity = 81,
+                            Temp_Kf  = 2.08},
+                        Weather = new Weather[]{
+                            new Weather() {
+                                Id = 500,
+                                Main = "Rain",
+                                Description = "light rain",
+                                Icon = "10d"},
+                        },
+                        Clouds = new Clouds(){
+                            all = 100,},
+                        Wind = new Wind(){ 
+                            Speed = 3.74,
+                            Deg = 301,
+                            Gust =  3.74},
+                        Visibility = 10000,
+                        Pop = 1,
+                        Dt_Txt = new DateTime(2022, 09, 23, 15, 0, 0)
+                    },
+                     new Lists(){
+                        Dt = 123,
+                        Main = new Main(){
+                            Temp = 12.1,
+                            Feels_Like = 11.56,
+                            Temp_Min = 9.51,
+                            Temp_Max = 12.1,
+                            Pressure = 1011,
+                            Sea_Level = 1011,
+                            Grnd_Level = 1002,
+                            Humidity = 84,
+                            Temp_Kf  = 2.58},
+                        Weather = new Weather[]{
+                            new Weather() {
+                                Id = 500,
+                                Main = "Rain",
+                                Description = "light rain",
+                                Icon = "10d"},
+                        },
+                        Clouds = new Clouds(){
+                            all = 100,},
+                        Wind = new Wind(){
+                            Speed = 2.94,
+                            Deg = 291,
+                            Gust =  6.85},
+                        Visibility = 10000,
+                        Pop = 1,
+                        Dt_Txt = new DateTime(2022, 09, 23, 18, 0, 0)
+                    },
+                      new Lists(){
+                        Dt = 123,
+                        Main = new Main(){
+                            Temp = 10.12,
+                            Feels_Like = 9.51,
+                            Temp_Min = 8.48,
+                            Temp_Max = 10.12,
+                            Pressure = 1012,
+                            Sea_Level = 1012,
+                            Grnd_Level = 1002,
+                            Humidity = 89,
+                            Temp_Kf  = 1.64},
+                        Weather = new Weather[]{
+                            new Weather() {
+                                Id = 500,
+                                Main = "Rain",
+                                Description = "light rain",
+                                Icon = "10d"},
+                        },
+                        Clouds = new Clouds(){
+                            all = 100,},
+                        Wind = new Wind(){
+                            Speed = 2.92,
+                            Deg = 300,
+                            Gust =  6.65},
+                        Visibility = 10000,
+                        Pop = 1,
+                        Dt_Txt = new DateTime(2022, 09, 23, 21, 0, 0)
+                    },
+                       new Lists(){
+                        Dt = 123,
+                        Main = new Main(){
+                            Temp = 8.41,
+                            Feels_Like = 6.6,
+                            Temp_Min = 8.41,
+                            Temp_Max = 8.41,
+                            Pressure = 1013,
+                            Sea_Level = 1013,
+                            Grnd_Level = 1002,
+                            Humidity = 91,
+                            Temp_Kf  = 0},
+                        Weather = new Weather[]{
+                            new Weather() {
+                                Id = 500,
+                                Main = "Rain",
+                                Description = "light rain",
+                                Icon = "10d"},
+                        },
+                        Clouds = new Clouds(){
+                            all = 95,},
+                        Wind = new Wind(){
+                            Speed = 3,
+                            Deg = 290,
+                            Gust = 7.75},
+                        Visibility = 10000,
+                        Pop = 1,
+                        Dt_Txt = new DateTime(2022, 09, 24, 00, 0, 0)
+                    }},
+                City = new City() { 
+                    Id = 12,
+                    Name = "Podil",
+                    Coord = new Coord() { 
+                        Lat = 50.4755,
+                        Lon = 30.5198},
+                    Country = "",
+                    Population = 0,
+                    Timezone = 10800,
+                    Sunrise = 1663904716,
+                    Sunset = 1663948532}
+                };
 
         }
         public async Task<IActionResult> Index()
         {
-            //var json = await _repository.PostWeatherByTomorrowAPI();
-
-
-            //var yourClass = JsonConvert.DeserializeObject<ResponsTomorrowAPI>(json.Content);
-
-            await _eventProvider.AddTomorrowWeatherHistiry(answer.Data.Timelines[0].Intervals);
-
-            return View(answer.Data.Timelines[0]);
-            //return View(yourClass.Data.Timelines[0]);
-            
+            ViewBag.TomorrowWeather = answerTomorrow.Data.Timelines[0];
+            return View(answerTomorrow.Data.Timelines[0]);
         }
         public IActionResult About()
         {
             return View();
         }
-        public IActionResult Archive()
+        public async Task<IActionResult> TomorrowWeather()
         {
-            return View();
-        }
 
+            await _eventProvider.AddTomorrowWeatherHistiry(answerTomorrow.Data.Timelines[0].Intervals);
+
+            return View(answerTomorrow.Data.Timelines[0]);
+        }
+        public async Task<IActionResult> OpenWeatherWeather()
+        {
+            var date = await _apiService.GetWeatherByOpenWeatherAPIv25Bulk();
+
+            var today = DateTime.Now.Day+1;
+
+            var rangeTempToday = date.List.Where(list => list.Dt_Txt.Day == today).ToArray();
+
+            await _eventProvider.AddOpenWeatherWeatherHistiry(rangeTempToday);
+
+            return View(rangeTempToday);
+        } 
     }
 }

@@ -5,6 +5,7 @@ using System;
 using Project.AVIew.EF.Repositories;
 using Project.AVIew.EF.Entities.Weather;
 using Project.AVIew.OtherAPI.Model.OpenWeather;
+using Project.AVIew.EF.Enums;
 
 namespace Project.AVIew.Services
 {
@@ -19,7 +20,7 @@ namespace Project.AVIew.Services
         {
             var saveDate = intervalsByDate.Select(tempdate => new WeatherHistory() {
                                                                                             Id = Guid.NewGuid(),
-                                                                                            Service = "Tomorro",
+                                                                                            Service = WeatherType.Tomorrow.ToString(),
                                                                                             DateTime = tempdate.StartTime,
                                                                                             Humidity = tempdate.Values.Humidity,
                                                                                             Temperature = tempdate.Values.Temperature,
@@ -32,7 +33,7 @@ namespace Project.AVIew.Services
             var saveDate = lists.Select(tempdate => new WeatherHistory()
                                                                         {
                                                                             Id = Guid.NewGuid(),
-                                                                            Service = "OpenWeather",
+                                                                            Service = WeatherType.OpenWeather.ToString(),
                                                                             DateTime = tempdate.Dt_Txt,
                                                                             Humidity = tempdate.Main.Humidity,
                                                                             Temperature = tempdate.Main.Temp,
