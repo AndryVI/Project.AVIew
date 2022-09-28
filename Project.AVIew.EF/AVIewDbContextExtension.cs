@@ -16,7 +16,7 @@ namespace Project.AVIew.EF
          
             services.AddDbContext<AVIewDbContext>(options =>
             {
-                //options.UseSqlServer(connectionString);
+                //options.UseSqlServer("Server=DESKTOP-UA6RAA3\\SQLITTEST; Database=WEB_DB; Trusted_Connection=True");
                 options.UseSqlServer(configuration["ConnectionString"]);
 
                 if (configuration["ASPNETCORE_ENVIRONMENT"] is not "prod")
@@ -30,6 +30,7 @@ namespace Project.AVIew.EF
         public static IServiceCollection AddAVIewEFRepositories(this IServiceCollection services)
         {
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IWeatherRepository, WeatherRepository>();
 
             return services;
         }

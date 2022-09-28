@@ -3,7 +3,7 @@
     Layout = "_Layout";
 }
 
-@model Project.AVIew.OtherAPI.Model.Tomorrow.Timelines;
+@model Project.AVIew.Model.ComparisonsWeatherAPI[];
 
 
 
@@ -11,24 +11,63 @@
     <div class="row">
 
         <div class="col-lg-12">
-            <h3 class="mb-3 "> Погода в Киеве сегодня</h3>
+            <h3 class="mb-3 ">
+                Сравнение температур 
+            </h3>
         </div>
     </div>
     <div class="row w3-example">
 
         <div class="col-lg-12">
-            <h3 class="mb-3 text-center ">Температура</h3>
-            <p>@await Html.PartialAsync("_TimePartial")</p>
             <div class="container">
                 <div class="row">
                     @if (Model != null)
                     {
-                        foreach (var Interval in Model.Intervals)
+                        <h3 class="mb-3 ">Временной интервал   </h3>
+                        foreach (var Interval in Model)
                         {
                             <div class="col" style="background-color: #f6faff; margin: 0 5px 0 5px; ">
                                 <br />
-                                <p class="text-center">@Interval.StartTime.ToString("HH:mm")</p>
-                                @switch (@Interval.Values.WeatherCode)
+                                <p class="text-center">@Interval.Time.ToString("HH:mm")</p>
+                            </div>
+                        }
+                        <h3 class="mb-3 ">Сервис OpenWeather </h3>
+                        foreach (var Interval in Model)
+                        {
+                            <div class="col" style="background-color: #f6faff; margin: 0 5px 0 5px; ">
+                                <br />
+                                <p class="text-center">@Interval.TemperatureOpenWeather Temperature °C</p>
+                                @switch (@Interval.CodOpenWeather)
+                                {
+                                    case "01d":<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="http://openweathermap.org/img/wn/01d@2x.png" alt=""> break;
+                                    case "02d":<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="http://openweathermap.org/img/wn/02d@2x.png" alt=""> break;
+                                    case "03d":<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="http://openweathermap.org/img/wn/03d@2x.png" alt=""> break;
+                                    case "04d":<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="http://openweathermap.org/img/wn/04d@2x.png" alt=""> break;
+                                    case "09d":<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="http://openweathermap.org/img/wn/09d@2x.png" alt=""> break;
+                                    case "10d":<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="http://openweathermap.org/img/wn/10d@2x.png" alt="">break;
+                                    case "11d":<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="http://openweathermap.org/img/wn/11d@2x.png" alt="">break;
+                                    case "13d":<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="http://openweathermap.org/img/wn/13d@2x.png" alt="">break;
+                                    case "50d":<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="http://openweathermap.org/img/wn/50d@2x.png" alt="">break;
+                                    case "01n":<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="http://openweathermap.org/img/wn/01n@2x.png" alt=""> break;
+                                    case "02n":<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="http://openweathermap.org/img/wn/02n@2x.png" alt=""> break;
+                                    case "03n":<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="http://openweathermap.org/img/wn/03n@2x.png" alt=""> break;
+                                    case "04n":<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="http://openweathermap.org/img/wn/04n@2x.png" alt=""> break;
+                                    case "09n":<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="http://openweathermap.org/img/wn/09n@2x.png" alt=""> break;
+                                    case "10n":<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="http://openweathermap.org/img/wn/10n@2x.png" alt="">break;
+                                    case "11n":<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="http://openweathermap.org/img/wn/11n@2x.png" alt="">break;
+                                    case "13n":<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="http://openweathermap.org/img/wn/13n@2x.png" alt="">break;
+                                    case "50n":<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="http://openweathermap.org/img/wn/50n@2x.png" alt="">break;
+                                    default: break;
+                                }
+                            </div>
+                        }
+                        <h3 class="mb-3 ">Сервис Tomorrow</h3>
+                        foreach (var Interval in Model)
+                        {
+                            <div class="col" style="background-color: #f6faff; margin: 0 5px 0 5px; ">
+                                <br />
+                                <p class="text-center">@Interval.TemperatureTomorrow Temperature °C</p>
+                                @switch (@Interval.CodTomorrow)
                                 {
                                     case (Project.AVIew.OtherAPI.Model.Tomorrow.WeatherCodes)1000:<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="https://files.readme.io/48b265b-weather_icon_small_ic_clear3x.png" alt=""> break;
                                     case (Project.AVIew.OtherAPI.Model.Tomorrow.WeatherCodes)1100:<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="https://files.readme.io/c3d2596-weather_icon_small_ic_mostly_clear3x.png" alt=""> break;
@@ -55,169 +94,12 @@
                                     case (Project.AVIew.OtherAPI.Model.Tomorrow.WeatherCodes)8000:<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="https://files.readme.io/39fb806-weather_icon_small_ic_tstorm3x.png" alt="">break;
                                     default: break;
                                 }
-
-                                <p class="text-center">@Interval.Values.Temperature °C</p>
                             </div>
                         }
+
                     }
                 </div>
             </div>
         </div>
-        <br />
-    </div>
-    <div class="row w3-example">
-
-        <div class="col-lg-12">
-            <h3 class="mb-3 text-center ">Скорость и направление ветра</h3>
-            <br />
-            <div class="container">
-                <div class="row">
-                    @if (Model != null)
-                    {
-                        foreach (var Interval in Model.Intervals)
-                        {
-                            <div class="col" style="background-color: #f6faff; margin: 0 5px 0 5px; ">
-                                <br />
-                                <p class="text-center">@Interval.Values.WindSpeed м/с</p>
-                                <br />
-                                <img class="mb-4 rounded mx-auto d-block windDirectionsIMG " src="~/svg/arrow.svg" alt="" style="@Html.Raw("transform: rotate(" + (int)@Interval.Values.WindDirection + "deg);")">
-                                <p class="text-center">@Interval.Values.WindDirection °</p>
-                            </div>
-                        }
-                    }
-                </div>
-            </div>
-            <br />
-        </div>
-        <br />
-    </div>
-
-
-
-    <div class="row w3-example">
-
-        <div class="col-lg-12">
-            <h3 class="mb-3 text-center ">Влажность, %</h3>
-            <br />
-            <div class="container">
-                <div class="row">
-                    @if (Model != null)
-                    {
-                        foreach (var Interval in Model.Intervals)
-                        {
-                            <div class="col" style="@Html.Raw("background-color: rgb(0 130 255 / " + (int)@Interval.Values.Humidity + "%); margin: 0 5px 0 5px;")">
-                                <br />
-                                <p class="text-center">@Interval.Values.Humidity</p>
-                            </div>
-
-                        }
-                    }
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row w3-example">
-
-        <div class="col-lg-12">
-            <h3 class="mb-3 text-center ">Осадок</h3>
-            <br />
-            <div class="container">
-                <h4 class="mb-3 ">Вероятность</h4>
-                <div class="row">
-                    @if (Model != null)
-                    {
-                        foreach (var Interval in Model.Intervals)
-                        {
-
-                            <div class="col" style="background-color: #f6faff; margin: 0 5px 0 5px; ">
-                                <br />
-                                <p class="text-center">@Interval.Values.PrecipitationProbability %</p>
-                            </div>
-                        }
-                    }
-                </div>
-                <h4 class="mb-3 ">Интенсивность</h4>
-                <div class="row">
-                    @if (Model != null)
-                    {
-                        foreach (var Interval in Model.Intervals)
-                        {
-
-                            <div class="col" style="background-color: #f6faff; margin: 0 5px 0 5px; ">
-                                <br />
-                                <p class="text-center">@Interval.Values.PrecipitationIntensity </p>
-                            </div>
-                        }
-                    }
-                </div>
-                <h4 class="mb-3">Тип</h4>
-                <div class="row">
-                    @if (Model != null)
-                    {
-                        foreach (var Interval in Model.Intervals)
-                        {
-
-                            <div class="col" style="background-color: #f6faff; margin: 0 5px 0 5px; ">
-                                <br />
-                                @switch (@Interval.Values.PrecipitationType)
-                                {
-                                    case (Project.AVIew.OtherAPI.Model.Tomorrow.PrecipitationTypes)1:<img class="mb-4 rounded mx-auto d-block windDirectionsIMG " src="~/svg/precipitationType/Rain.svg" alt=""> break;
-                                    case (Project.AVIew.OtherAPI.Model.Tomorrow.PrecipitationTypes)2:<img class="mb-4 rounded mx-auto d-block windDirectionsIMG " src="~/svg/precipitationType/Snow.svg" alt=""> break;
-                                    case (Project.AVIew.OtherAPI.Model.Tomorrow.PrecipitationTypes)3:<img class="mb-4 rounded mx-auto d-block windDirectionsIMG " src="~/svg/precipitationType/FreezingRain.svg" alt=""> break;
-                                    case (Project.AVIew.OtherAPI.Model.Tomorrow.PrecipitationTypes)4:<img class="mb-4 rounded mx-auto d-block windDirectionsIMG " src="~/svg/precipitationType/IcePellets.svg" alt=""> break;
-                                    default:<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="~/svg/precipitationType/NA.svg" alt="">break;
-                                }
-                            </div>
-                        }
-                    }
-                </div>
-            </div>
-        </div>
-    </div>
-    <br />
-    <div class="row w3-example">
-
-        <div class="col-lg-12">
-            <h3 class="mb-3 text-center ">Видимость объектов </h3>
-            <br />
-            <div class="container">
-                <div class="row">
-                    @if (Model != null)
-                    {
-                        foreach (var Interval in Model.Intervals)
-                        {
-                            <div class="col" style="background-color: #f6faff; margin: 0 5px 0 5px; ">
-                                <br />
-                                <p class="text-center">@Interval.Values.Visibility км</p>
-                            </div>
-
-                        }
-                    }
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row w3-example">
-
-        <div class="col-lg-12">
-            <h3 class="mb-3 text-center ">Процент покрытия неба облаками</h3>
-            <br />
-            <div class="container">
-                <div class="row">
-                    @if (Model != null)
-                    {
-                        foreach (var Interval in Model.Intervals)
-                        {
-                            <div class="col" style="background-color: #f6faff; margin: 0 5px 0 5px; ">
-                                <br />
-                                <p class="text-center">@Interval.Values.CloudCover %</p>
-                            </div>
-
-                        }
-                    }
-                </div>
-            </div>
-        </div>
-    </div>
+   
 </div>

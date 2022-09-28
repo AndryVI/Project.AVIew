@@ -1,22 +1,27 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Project.AVIew.Model;
 using Project.AVIew.OtherAPI.Model.Tomorrow;
 using System.Threading.Tasks;
 using System;
+using System.Linq;
 using Newtonsoft.Json;
 using Project.AVIew.OtherAPI.Services;
+using Project.AVIew.Services;
+using Project.AVIew.OtherAPI.Model.OpenWeather;
+using System.Collections.Generic;
+using Project.AVIew.Model;
 
 namespace Project.AVIew.Controllers
 {
 
     public class HomeController : Controller
     {
-        private readonly IAPIServices _repository;
-        private ResponsTomorrowAPI answer;
-        public HomeController(IAPIServices repository)
+        private readonly IAPIServices _apiService;
+        private ResponsTomorrowAPI answerTomorrow;
+        private ResponsOpenWeatherAPI answerOpenWeather;
+        public HomeController(IAPIServices apiService)
         {
-            _repository = repository;
-            answer = new ResponsTomorrowAPI() {
+            _apiService = apiService;
+            answerTomorrow = new ResponsTomorrowAPI() {
                 Data = new Data()
                 {
                     Timelines = new Timelines[] {
@@ -26,7 +31,7 @@ namespace Project.AVIew.Controllers
                                 StartTime = new DateTime(2022, 08, 29, 13, 0, 0),
                                 Intervals = new IntervalsByDate[]{
                                         new IntervalsByDate(){
-                                            StartTime = new DateTime(2022, 08, 29, 13, 0, 0),
+                                            StartTime = new DateTime(2022, 09, 23, 07, 0, 0),
                                             Values = new Values()   {
                                                                     Temperature = 20.06,
                                                                     WeatherCode = (WeatherCodes)1001,
@@ -41,7 +46,7 @@ namespace Project.AVIew.Controllers
                                                                     GrassIndex = 0}
                                             },
                                         new IntervalsByDate(){
-                                            StartTime = new DateTime(2022, 08, 29, 14, 0, 0),
+                                            StartTime = new DateTime(2022, 09, 23, 08, 0, 0),
                                             Values = new Values()   {
                                                                     Temperature = 24.12,
                                                                     WeatherCode = (WeatherCodes)1100,
@@ -56,7 +61,7 @@ namespace Project.AVIew.Controllers
                                                                     GrassIndex = 0}
                                             },
                                         new IntervalsByDate(){
-                                            StartTime = new DateTime(2022, 08, 29, 15, 0, 0),
+                                            StartTime = new DateTime(2022, 09, 23, 09, 0, 0),
                                             Values = new Values()   {
                                                                     Temperature = 26.4,
                                                                     WeatherCode = (WeatherCodes)1100,
@@ -71,7 +76,7 @@ namespace Project.AVIew.Controllers
                                                                     GrassIndex = 0}
                                             },
                                         new IntervalsByDate(){
-                                            StartTime = new DateTime(2022, 08, 29, 16, 0, 0),
+                                            StartTime = new DateTime(2022, 09, 23, 10, 0, 0),
                                             Values = new Values()   {
                                                                     Temperature = 28.1,
                                                                     WeatherCode = (WeatherCodes)1100,
@@ -86,7 +91,7 @@ namespace Project.AVIew.Controllers
                                                                     GrassIndex = 0}
                                             },
                                         new IntervalsByDate(){
-                                            StartTime = new DateTime(2022, 08, 29, 17, 0, 0),
+                                            StartTime = new DateTime(2022, 09, 23, 11, 0, 0),
                                             Values = new Values()   {
                                                                     Temperature = 29.65,
                                                                     WeatherCode = (WeatherCodes)1000,
@@ -101,7 +106,7 @@ namespace Project.AVIew.Controllers
                                                                     GrassIndex = 0}
                                             },
                                         new IntervalsByDate(){
-                                            StartTime = new DateTime(2022, 08, 29, 18, 0, 0),
+                                            StartTime = new DateTime(2022, 09, 23, 12, 0, 0),
                                             Values = new Values()   {
                                                                     Temperature = 30.78,
                                                                     WeatherCode = (WeatherCodes)1100,
@@ -116,7 +121,7 @@ namespace Project.AVIew.Controllers
                                                                     GrassIndex = 0}
                                             },
                                         new IntervalsByDate(){
-                                            StartTime = new DateTime(2022, 08, 29, 19, 0, 0),
+                                            StartTime = new DateTime(2022, 09, 23, 13, 0, 0),
                                             Values = new Values()   {
                                                                     Temperature = 31.32,
                                                                     WeatherCode = (WeatherCodes)1001,
@@ -136,26 +141,318 @@ namespace Project.AVIew.Controllers
                     }
                 } 
             };
+            answerOpenWeather = new ResponsOpenWeatherAPI() {
+                Cod = 200,
+                Message = "",
+                Cnt = "",
+                List = new Lists[] {
+                    /*
+                      new Lists(){
+                        Dt = 117,
+                        Main = new Main(){
+                            Temp = 7.4,
+                            Feels_Like = 12.91,
+                            Temp_Min = 11.31,
+                            Temp_Max = 13.4,
+                            Pressure = 1009,
+                            Sea_Level = 1009,
+                            Grnd_Level = 1002,
+                            Humidity = 81,
+                            Temp_Kf  = 2.08},
+                        Weather = new Weather[]{
+                            new Weather() {
+                                Id = 500,
+                                Main = "Rain",
+                                Description = "light rain",
+                                Icon = "10d"},
+                        },
+                        Clouds = new Clouds(){
+                            all = 100,},
+                        Wind = new Wind(){
+                            Speed = 3.74,
+                            Deg = 301,
+                            Gust =  3.74},
+                        Visibility = 10000,
+                        Pop = 1,
+                        Dt_Txt = new DateTime(2022, 09, 23, 00, 0, 0)
+                    },
+                      new Lists(){
+                        Dt = 118,
+                        Main = new Main(){
+                            Temp = 09.4,
+                            Feels_Like = 12.91,
+                            Temp_Min = 11.31,
+                            Temp_Max = 13.4,
+                            Pressure = 1009,
+                            Sea_Level = 1009,
+                            Grnd_Level = 1002,
+                            Humidity = 81,
+                            Temp_Kf  = 2.08},
+                        Weather = new Weather[]{
+                            new Weather() {
+                                Id = 500,
+                                Main = "Rain",
+                                Description = "light rain",
+                                Icon = "10d"},
+                        },
+                        Clouds = new Clouds(){
+                            all = 100,},
+                        Wind = new Wind(){
+                            Speed = 3.74,
+                            Deg = 301,
+                            Gust =  3.74},
+                        Visibility = 10000,
+                        Pop = 1,
+                        Dt_Txt = new DateTime(2022, 09, 23, 03, 0, 0)
+                    },
+                    new Lists(){
+                        Dt = 119,
+                        Main = new Main(){
+                            Temp = 10.4,
+                            Feels_Like = 12.91,
+                            Temp_Min = 11.31,
+                            Temp_Max = 13.4,
+                            Pressure = 1009,
+                            Sea_Level = 1009,
+                            Grnd_Level = 1002,
+                            Humidity = 81,
+                            Temp_Kf  = 2.08},
+                        Weather = new Weather[]{
+                            new Weather() {
+                                Id = 500,
+                                Main = "Rain",
+                                Description = "light rain",
+                                Icon = "10d"},
+                        },
+                        Clouds = new Clouds(){
+                            all = 100,},
+                        Wind = new Wind(){
+                            Speed = 3.74,
+                            Deg = 301,
+                            Gust =  3.74},
+                        Visibility = 10000,
+                        Pop = 1,
+                        Dt_Txt = new DateTime(2022, 09, 23, 06, 0, 0)
+                    },*/
+                    new Lists(){
+                        Dt = 120,
+                        Main = new Main(){
+                            Temp = 10.4,
+                            Feels_Like = 12.91,
+                            Temp_Min = 11.31,
+                            Temp_Max = 13.4,
+                            Pressure = 1009,
+                            Sea_Level = 1009,
+                            Grnd_Level = 1002,
+                            Humidity = 81,
+                            Temp_Kf  = 2.08},
+                        Weather = new Weather[]{
+                            new Weather() {
+                                Id = 500,
+                                Main = "Rain",
+                                Description = "light rain",
+                                Icon = "10d"},
+                        },
+                        Clouds = new Clouds(){
+                            all = 100,},
+                        Wind = new Wind(){
+                            Speed = 3.74,
+                            Deg = 301,
+                            Gust =  3.74},
+                        Visibility = 10000,
+                        Pop = 1,
+                        Dt_Txt = new DateTime(2022, 09, 23, 09, 0, 0)
+                    },
+                    new Lists(){
+                        Dt = 121,
+                        Main = new Main(){
+                            Temp = 13.4,
+                            Feels_Like = 12.91,
+                            Temp_Min = 11.31,
+                            Temp_Max = 13.4,
+                            Pressure = 1009,
+                            Sea_Level = 1009,
+                            Grnd_Level = 1002,
+                            Humidity = 81,
+                            Temp_Kf  = 2.08},
+                        Weather = new Weather[]{
+                            new Weather() {
+                                Id = 500,
+                                Main = "Rain",
+                                Description = "light rain",
+                                Icon = "10d"},
+                        },
+                        Clouds = new Clouds(){
+                            all = 100,},
+                        Wind = new Wind(){
+                            Speed = 3.74,
+                            Deg = 301,
+                            Gust =  3.74},
+                        Visibility = 10000,
+                        Pop = 1,
+                        Dt_Txt = new DateTime(2022, 09, 23, 12, 0, 0)
+                    },
+                    new Lists(){
+                        Dt = 122,
+                        Main = new Main(){
+                            Temp = 12.4,
+                            Feels_Like = 12.91,
+                            Temp_Min = 11.31,
+                            Temp_Max = 13.4,
+                            Pressure = 1009,
+                            Sea_Level = 1009,
+                            Grnd_Level = 1002,
+                            Humidity = 81,
+                            Temp_Kf  = 2.08},
+                        Weather = new Weather[]{
+                            new Weather() {
+                                Id = 500,
+                                Main = "Rain",
+                                Description = "light rain",
+                                Icon = "10d"},
+                        },
+                        Clouds = new Clouds(){
+                            all = 100,},
+                        Wind = new Wind(){ 
+                            Speed = 3.74,
+                            Deg = 301,
+                            Gust =  3.74},
+                        Visibility = 10000,
+                        Pop = 1,
+                        Dt_Txt = new DateTime(2022, 09, 23, 15, 0, 0)
+                    },
+                     new Lists(){
+                        Dt = 123,
+                        Main = new Main(){
+                            Temp = 12.1,
+                            Feels_Like = 11.56,
+                            Temp_Min = 9.51,
+                            Temp_Max = 12.1,
+                            Pressure = 1011,
+                            Sea_Level = 1011,
+                            Grnd_Level = 1002,
+                            Humidity = 84,
+                            Temp_Kf  = 2.58},
+                        Weather = new Weather[]{
+                            new Weather() {
+                                Id = 500,
+                                Main = "Rain",
+                                Description = "light rain",
+                                Icon = "10d"},
+                        },
+                        Clouds = new Clouds(){
+                            all = 100,},
+                        Wind = new Wind(){
+                            Speed = 2.94,
+                            Deg = 291,
+                            Gust =  6.85},
+                        Visibility = 10000,
+                        Pop = 1,
+                        Dt_Txt = new DateTime(2022, 09, 23, 18, 0, 0)
+                    },
+                      new Lists(){
+                        Dt = 123,
+                        Main = new Main(){
+                            Temp = 10.12,
+                            Feels_Like = 9.51,
+                            Temp_Min = 8.48,
+                            Temp_Max = 10.12,
+                            Pressure = 1012,
+                            Sea_Level = 1012,
+                            Grnd_Level = 1002,
+                            Humidity = 89,
+                            Temp_Kf  = 1.64},
+                        Weather = new Weather[]{
+                            new Weather() {
+                                Id = 500,
+                                Main = "Rain",
+                                Description = "light rain",
+                                Icon = "10d"},
+                        },
+                        Clouds = new Clouds(){
+                            all = 100,},
+                        Wind = new Wind(){
+                            Speed = 2.92,
+                            Deg = 300,
+                            Gust =  6.65},
+                        Visibility = 10000,
+                        Pop = 1,
+                        Dt_Txt = new DateTime(2022, 09, 23, 21, 0, 0)
+                    },
+                       new Lists(){
+                        Dt = 123,
+                        Main = new Main(){
+                            Temp = 8.41,
+                            Feels_Like = 6.6,
+                            Temp_Min = 8.41,
+                            Temp_Max = 8.41,
+                            Pressure = 1013,
+                            Sea_Level = 1013,
+                            Grnd_Level = 1002,
+                            Humidity = 91,
+                            Temp_Kf  = 0},
+                        Weather = new Weather[]{
+                            new Weather() {
+                                Id = 500,
+                                Main = "Rain",
+                                Description = "light rain",
+                                Icon = "10d"},
+                        },
+                        Clouds = new Clouds(){
+                            all = 95,},
+                        Wind = new Wind(){
+                            Speed = 3,
+                            Deg = 290,
+                            Gust = 7.75},
+                        Visibility = 10000,
+                        Pop = 1,
+                        Dt_Txt = new DateTime(2022, 09, 24, 00, 0, 0)
+                    }},
+                City = new City() { 
+                    Id = 12,
+                    Name = "Podil",
+                    Coord = new Coord() { 
+                        Lat = 50.4755,
+                        Lon = 30.5198},
+                    Country = "",
+                    Population = 0,
+                    Timezone = 10800,
+                    Sunrise = 1663904716,
+                    Sunset = 1663948532}
+                };
 
         }
         public async Task<IActionResult> Index()
         {
-            //var json = await _repository.PostWeatherByTomorrowAPI();
+            //var responsTomorrow = await _apiService.PostWeatherByTomorrowAPI();
+            //var responsOpenWeather = await _apiService.GetWeatherByOpenWeatherAPIv25Bulk();
 
+            var comparisonsWeatherAPI = new List<ComparisonsWeatherAPI>();
+            foreach (var openWeather in answerOpenWeather.List)
+            {
+                foreach (var tomorrow in answerTomorrow.Data.Timelines[0].Intervals)
+                {
+                    if (openWeather.Dt_Txt == tomorrow.StartTime)
+                    {
+                        comparisonsWeatherAPI.Add(new ComparisonsWeatherAPI(){
+                            TemperatureOpenWeather = openWeather.Main.Temp,
+                            CodOpenWeather = openWeather.Weather[0].Icon,
+                            TemperatureTomorrow = tomorrow.Values.Temperature,
+                            CodTomorrow = tomorrow.Values.WeatherCode,
+                            Time = openWeather.Dt_Txt
+                        });
+                    }
+                }
+            }
 
-            //var yourClass = JsonConvert.DeserializeObject<ResponsTomorrowAPI>(json.Content);
-
-            return View(answer.Data.Timelines[0]);
-            //return View(yourClass.Data.Timelines[0]);
+            return View(comparisonsWeatherAPI.ToArray());
         }
+
+
+
         public IActionResult About()
         {
             return View();
         }
-        public IActionResult Archive()
-        {
-            return View();
-        }
-
     }
 }

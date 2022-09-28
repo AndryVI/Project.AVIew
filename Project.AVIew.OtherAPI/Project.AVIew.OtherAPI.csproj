@@ -10,4 +10,12 @@
     <PackageReference Include="RestSharp" Version="108.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Project.AVIew.EF\Project.AVIew.EF.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Model\OpenWeather\Enum\" />
+  </ItemGroup>
+
 </Project>

@@ -1,0 +1,162 @@
+﻿@{
+    ViewData["Title"] = "TomorrowWeather";
+    Layout = "_Layout";
+}
+
+@model Project.AVIew.OtherAPI.Model.OpenWeather.Lists[];
+
+
+
+<div class="container marketing padding-boreder">
+    <div class="row">
+
+        <div class="col-lg-12">
+            <h3 class="mb-3 "> Погода в Киеве сегодня (OpenWeather)</h3>
+        </div>
+    </div>
+    <div class="row w3-example">
+
+        <div class="col-lg-12">
+            <h3 class="mb-3 text-center ">Температура</h3>
+            <p>@await Html.PartialAsync("_TimePartial")</p>
+            <div class="container">
+                <div class="row">
+                    @if (Model != null)
+                    {
+                        foreach (var list in Model)
+                        {
+                    <div class="col" style="background-color: #f6faff; margin: 0 5px 0 5px; ">
+                        <br />
+                        <p class="text-center">@list.Dt_Txt.ToString("HH:mm")</p>
+                        @foreach (var weather in list.Weather)
+                        {
+                            @switch (@weather.Icon)
+                            {
+                                case "01d":<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="http://openweathermap.org/img/wn/01d@2x.png" alt=""> break;
+                                case "02d":<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="http://openweathermap.org/img/wn/02d@2x.png" alt=""> break;
+                                case "03d":<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="http://openweathermap.org/img/wn/03d@2x.png" alt=""> break;
+                                case "04d":<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="http://openweathermap.org/img/wn/04d@2x.png" alt=""> break;
+                                case "09d":<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="http://openweathermap.org/img/wn/09d@2x.png" alt=""> break;
+                                case "10d":<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="http://openweathermap.org/img/wn/10d@2x.png" alt="">break;
+                                case "11d":<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="http://openweathermap.org/img/wn/11d@2x.png" alt="">break;
+                                case "13d":<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="http://openweathermap.org/img/wn/13d@2x.png" alt="">break;
+                                case "50d":<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="http://openweathermap.org/img/wn/50d@2x.png" alt="">break;
+                                case "01n":<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="http://openweathermap.org/img/wn/01n@2x.png" alt=""> break;
+                                case "02n":<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="http://openweathermap.org/img/wn/02n@2x.png" alt=""> break;
+                                case "03n":<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="http://openweathermap.org/img/wn/03n@2x.png" alt=""> break;
+                                case "04n":<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="http://openweathermap.org/img/wn/04n@2x.png" alt=""> break;
+                                case "09n":<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="http://openweathermap.org/img/wn/09n@2x.png" alt=""> break;
+                                case "10n":<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="http://openweathermap.org/img/wn/10n@2x.png" alt="">break;
+                                case "11n":<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="http://openweathermap.org/img/wn/11n@2x.png" alt="">break;
+                                case "13n":<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="http://openweathermap.org/img/wn/13n@2x.png" alt="">break;
+                                case "50n":<img class="mb-4 rounded mx-auto d-block weatherCodesIMG " src="http://openweathermap.org/img/wn/50n@2x.png" alt="">break;
+                                default: break;
+                            }
+                        }
+                        <p class="text-center">@list.Main.Temp °C</p>
+                    </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+        <br />
+    </div>
+    <div class="row w3-example">
+
+        <div class="col-lg-12">
+            <h3 class="mb-3 text-center ">Скорость и направление ветра</h3>
+            <br />
+            <div class="container">
+                <div class="row">
+                    @if (Model != null)
+                    {
+                        foreach (var list in Model)
+                        {
+                            <div class="col" style="background-color: #f6faff; margin: 0 5px 0 5px; ">
+                                <br />
+                                <p class="text-center">@list.Wind.Speed м/с</p>
+                                <br />
+                                <img class="mb-4 rounded mx-auto d-block windDirectionsIMG " src="~/svg/arrow.svg" alt="" style="@Html.Raw("transform: rotate(" + (int)@list.Wind.Deg + "deg);")">
+                                <p class="text-center">@list.Wind.Deg °</p>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+            <br />
+        </div>
+        <br />
+    </div>
+
+
+
+    <div class="row w3-example">
+
+        <div class="col-lg-12">
+            <h3 class="mb-3 text-center ">Влажность, %</h3>
+            <br />
+            <div class="container">
+                <div class="row">
+                    @if (Model != null)
+                    {
+                        foreach (var list in Model)
+                        {
+                            <div class="col" style="@Html.Raw("background-color: rgb(0 130 255 / " + (int)@list.Main.Humidity + "%); margin: 0 5px 0 5px;")">
+                                <br />
+                                <p class="text-center">@list.Main.Humidity </p>
+                            </div>
+
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br />
+    <div class="row w3-example">
+
+        <div class="col-lg-12">
+            <h3 class="mb-3 text-center ">Видимость объектов </h3>
+            <br />
+            <div class="container">
+                <div class="row">
+                    @if (Model != null)
+                    {
+                        foreach (var list in Model)
+                        {
+                            <div class="col" style="background-color: #f6faff; margin: 0 5px 0 5px; ">
+                                <br />
+                                <p class="text-center">@list.Visibility м</p>
+                            </div>
+
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row w3-example">
+
+        <div class="col-lg-12">
+            <h3 class="mb-3 text-center ">Процент покрытия неба облаками</h3>
+            <br />
+            <div class="container">
+                <div class="row">
+                    @if (Model != null)
+                    {
+                        foreach (var list in Model)
+                        {
+                            <div class="col" style="background-color: #f6faff; margin: 0 5px 0 5px; ">
+                                <br />
+                                <p class="text-center">@list.Clouds.all %</p>
+                            </div>
+
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
