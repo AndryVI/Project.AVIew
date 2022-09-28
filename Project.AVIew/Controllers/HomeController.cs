@@ -8,6 +8,7 @@ using Project.AVIew.OtherAPI.Services;
 using Project.AVIew.Services;
 using Project.AVIew.OtherAPI.Model.OpenWeather;
 using System.Collections.Generic;
+using Project.AVIew.Model;
 
 namespace Project.AVIew.Controllers
 {
@@ -15,13 +16,11 @@ namespace Project.AVIew.Controllers
     public class HomeController : Controller
     {
         private readonly IAPIServices _apiService;
-        private readonly IEventProvider _eventProvider;
         private ResponsTomorrowAPI answerTomorrow;
         private ResponsOpenWeatherAPI answerOpenWeather;
-        public HomeController(IAPIServices apiService, IEventProvider eventProvider)
+        public HomeController(IAPIServices apiService)
         {
             _apiService = apiService;
-            _eventProvider = eventProvider;
             answerTomorrow = new ResponsTomorrowAPI() {
                 Data = new Data()
                 {
@@ -32,7 +31,7 @@ namespace Project.AVIew.Controllers
                                 StartTime = new DateTime(2022, 08, 29, 13, 0, 0),
                                 Intervals = new IntervalsByDate[]{
                                         new IntervalsByDate(){
-                                            StartTime = new DateTime(2022, 08, 29, 13, 0, 0),
+                                            StartTime = new DateTime(2022, 09, 23, 07, 0, 0),
                                             Values = new Values()   {
                                                                     Temperature = 20.06,
                                                                     WeatherCode = (WeatherCodes)1001,
@@ -47,7 +46,7 @@ namespace Project.AVIew.Controllers
                                                                     GrassIndex = 0}
                                             },
                                         new IntervalsByDate(){
-                                            StartTime = new DateTime(2022, 08, 29, 14, 0, 0),
+                                            StartTime = new DateTime(2022, 09, 23, 08, 0, 0),
                                             Values = new Values()   {
                                                                     Temperature = 24.12,
                                                                     WeatherCode = (WeatherCodes)1100,
@@ -62,7 +61,7 @@ namespace Project.AVIew.Controllers
                                                                     GrassIndex = 0}
                                             },
                                         new IntervalsByDate(){
-                                            StartTime = new DateTime(2022, 08, 29, 15, 0, 0),
+                                            StartTime = new DateTime(2022, 09, 23, 09, 0, 0),
                                             Values = new Values()   {
                                                                     Temperature = 26.4,
                                                                     WeatherCode = (WeatherCodes)1100,
@@ -77,7 +76,7 @@ namespace Project.AVIew.Controllers
                                                                     GrassIndex = 0}
                                             },
                                         new IntervalsByDate(){
-                                            StartTime = new DateTime(2022, 08, 29, 16, 0, 0),
+                                            StartTime = new DateTime(2022, 09, 23, 10, 0, 0),
                                             Values = new Values()   {
                                                                     Temperature = 28.1,
                                                                     WeatherCode = (WeatherCodes)1100,
@@ -92,7 +91,7 @@ namespace Project.AVIew.Controllers
                                                                     GrassIndex = 0}
                                             },
                                         new IntervalsByDate(){
-                                            StartTime = new DateTime(2022, 08, 29, 17, 0, 0),
+                                            StartTime = new DateTime(2022, 09, 23, 11, 0, 0),
                                             Values = new Values()   {
                                                                     Temperature = 29.65,
                                                                     WeatherCode = (WeatherCodes)1000,
@@ -107,7 +106,7 @@ namespace Project.AVIew.Controllers
                                                                     GrassIndex = 0}
                                             },
                                         new IntervalsByDate(){
-                                            StartTime = new DateTime(2022, 08, 29, 18, 0, 0),
+                                            StartTime = new DateTime(2022, 09, 23, 12, 0, 0),
                                             Values = new Values()   {
                                                                     Temperature = 30.78,
                                                                     WeatherCode = (WeatherCodes)1100,
@@ -122,7 +121,7 @@ namespace Project.AVIew.Controllers
                                                                     GrassIndex = 0}
                                             },
                                         new IntervalsByDate(){
-                                            StartTime = new DateTime(2022, 08, 29, 19, 0, 0),
+                                            StartTime = new DateTime(2022, 09, 23, 13, 0, 0),
                                             Values = new Values()   {
                                                                     Temperature = 31.32,
                                                                     WeatherCode = (WeatherCodes)1001,
@@ -147,6 +146,7 @@ namespace Project.AVIew.Controllers
                 Message = "",
                 Cnt = "",
                 List = new Lists[] {
+                    /*
                       new Lists(){
                         Dt = 117,
                         Main = new Main(){
@@ -233,7 +233,7 @@ namespace Project.AVIew.Controllers
                         Visibility = 10000,
                         Pop = 1,
                         Dt_Txt = new DateTime(2022, 09, 23, 06, 0, 0)
-                    },
+                    },*/
                     new Lists(){
                         Dt = 120,
                         Main = new Main(){
@@ -424,31 +424,35 @@ namespace Project.AVIew.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            ViewBag.TomorrowWeather = answerTomorrow.Data.Timelines[0];
-            return View(answerTomorrow.Data.Timelines[0]);
+            //var responsTomorrow = await _apiService.PostWeatherByTomorrowAPI();
+            //var responsOpenWeather = await _apiService.GetWeatherByOpenWeatherAPIv25Bulk();
+
+            var comparisonsWeatherAPI = new List<ComparisonsWeatherAPI>();
+            foreach (var openWeather in answerOpenWeather.List)
+            {
+                foreach (var tomorrow in answerTomorrow.Data.Timelines[0].Intervals)
+                {
+                    if (openWeather.Dt_Txt == tomorrow.StartTime)
+                    {
+                        comparisonsWeatherAPI.Add(new ComparisonsWeatherAPI(){
+                            TemperatureOpenWeather = openWeather.Main.Temp,
+                            CodOpenWeather = openWeather.Weather[0].Icon,
+                            TemperatureTomorrow = tomorrow.Values.Temperature,
+                            CodTomorrow = tomorrow.Values.WeatherCode,
+                            Time = openWeather.Dt_Txt
+                        });
+                    }
+                }
+            }
+
+            return View(comparisonsWeatherAPI.ToArray());
         }
+
+
+
         public IActionResult About()
         {
             return View();
         }
-        public async Task<IActionResult> TomorrowWeather()
-        {
-
-            await _eventProvider.AddTomorrowWeatherHistiry(answerTomorrow.Data.Timelines[0].Intervals);
-
-            return View(answerTomorrow.Data.Timelines[0]);
-        }
-        public async Task<IActionResult> OpenWeatherWeather()
-        {
-            var date = await _apiService.GetWeatherByOpenWeatherAPIv25Bulk();
-
-            var today = DateTime.Now.Day+1;
-
-            var rangeTempToday = date.List.Where(list => list.Dt_Txt.Day == today).ToArray();
-
-            await _eventProvider.AddOpenWeatherWeatherHistiry(rangeTempToday);
-
-            return View(rangeTempToday);
-        } 
     }
 }

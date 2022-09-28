@@ -49,7 +49,7 @@ namespace Project.AVIew.OtherAPI.Services
         public async Task<Lists> GetWeatherByOpenWeatherAPIv25Current()
         {
             var client = new RestClient("https://api.openweathermap.org/data/2.5/");
-            var request = new RestRequest($"weather?lat=50.4755&lon=30.5198&appid={_apiKey_OpenWeathe}", Method.Get);
+            var request = new RestRequest($"weather?lat=50.4755&lon=30.5198&appid={_apiKey_OpenWeathe}&units=metric", Method.Get);
             request.AddHeader("Accept", "application/json");
             request.AddHeader("Accept-Encoding", "gzip");
             RestResponse response = await client.ExecuteAsync(request);
